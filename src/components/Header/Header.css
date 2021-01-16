@@ -1,0 +1,72 @@
+.header {
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  grid-template-rows: min-content;
+  align-items: center;
+  background: rgba(196, 196, 196, 0.01);
+  box-shadow: inset 0px -1px 0px rgba(255, 255, 255, 0.2);
+  padding: 19px 104px 13px;
+  margin-bottom: 80px;
+}
+
+.header_logged {
+  box-shadow: inset 0px -1px 0px #D1D2D6;
+}
+
+.header__button {
+  position: relative;
+  background: transparent;
+  border: 1px solid #fff;  
+  border-radius: 100px;
+  padding: 12px 65px;
+  box-sizing: border-box;
+  font-family: "Roboto", "Arial", sans-serif; 
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  color: #FFF;
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.header__button_logged {
+  padding: 12px 44px 12px 22px;
+}
+
+.header__button_logged::before {
+  position: absolute;
+  top: 34%;  
+  left: 74px;
+  width: 100%;
+  height: 100%; 
+  background-image: url(./../../images/icons/Union2.svg);
+  background-repeat: no-repeat;
+  content: "";
+}
+
+.header__button_logged-saved-news::after {
+  position: absolute;
+  top: 34%;  
+  left: 74px;
+  width: 100%;
+  height: 100%; 
+  background-image: url(./../../images/icons/Union.svg);
+  background-repeat: no-repeat;
+  content: "";
+}
+
+
+.header__button_theme_black {
+  color: #000;
+  border: 1px solid #1A1B22;
+}
+
+.header__button:hover {
+  cursor: pointer;
+}
+
+.header__button:focus {  
+  outline: none;
+}

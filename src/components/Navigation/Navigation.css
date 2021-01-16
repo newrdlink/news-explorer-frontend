@@ -1,0 +1,14 @@
+.navigation {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}

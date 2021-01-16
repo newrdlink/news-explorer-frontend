@@ -1,0 +1,8 @@
+.basket {
+  width: 18px;
+  height: 19px;
+}
+
+.basket:hover {
+  cursor: pointer;
+}
