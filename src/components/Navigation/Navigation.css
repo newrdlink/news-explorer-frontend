@@ -14,9 +14,16 @@
 }
 
 .navigation__items_place_mobile {  
-  position: absolute; 
-  
+  position: absolute;   
   top: 70px; 
   left: 16px;
   flex-direction: column; 
+}
+
+@media screen and (max-width: 500px) {
+  .navigation {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
 }
