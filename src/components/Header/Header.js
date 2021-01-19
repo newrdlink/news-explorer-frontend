@@ -6,25 +6,36 @@ import Navigation from '../Navigation/Navigation';
 import menuItems from '../../config/menuItems';
 import cn from 'classnames';
 import Button from '../Button/Button';
+import MenuMobile from '../icons/MenuMobile/MenuMobile';
+import useWindowSize from '../../helpers/windowsWidth';
 
 const Header = ({ onAuth, currentUser, logOut }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
-  // console.log(currentUser)
+
   return (
-    <header className={cn("header", { "header_logged": currentPath === "/saved-news" })}>
+    <header className={cn("header",
+      { "header_logged": currentPath === "/saved-news" },
+      { "header_place_mobile": useWindowSize() < 690 }
+    )}>
       <Logo />
-      <Navigation
-        menuItems={menuItems}
-        place='header'
-        currentUser={currentUser}
-      />
-      <Button place="header"
+      {useWindowSize() < 690 ?
+        <MenuMobile currentUser={currentUser}
+          place="header-mobile"
+          onAuth={onAuth}
+          logOut={logOut}
+        /> :
+        <Navigation
+          menuItems={menuItems}
+          place='header'
+          currentUser={currentUser}
+        />}
+      {useWindowSize() < 690 ? null : <Button place="header"
         userName={currentUser.name}
         currentPath={currentPath}
         onClick={currentUser.loggedIn ? logOut : onAuth}
-      />
+      />}
     </header>
   )
 }

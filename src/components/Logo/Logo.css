@@ -18,3 +18,9 @@
 .logo:hover {
   cursor: pointer;
 }
+
+@media screen and (max-width: 690px) {
+  .logo {
+    font-size: 16px;
+  }
+}

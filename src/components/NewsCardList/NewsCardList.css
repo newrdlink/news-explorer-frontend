@@ -17,6 +17,7 @@
 }
 
 .news__button {
+  margin-top: 60px;
   padding: 20px 84px;  
   font-family: "Roboto", "Arial", sans-serif;
   font-style: normal;
@@ -45,3 +46,24 @@
 .news__button:active {
 
 } 
+
+@media screen and (max-width: 850px) {
+  .news {
+    padding: 40px;
+  }
+  .news__button {
+    margin-top: 22px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .news__title {
+    font-size: 30px;
+    line-height: 34px;
+    margin: 0 0 24px;
+    padding-right: 20px;
+  }
+  .news {
+    padding: 32px 16px;
+  }
+}

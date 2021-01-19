@@ -36,12 +36,12 @@ const PopupWithForm = ({ children, name, buttonName, onSubmit, isOpen, onClose, 
             <span className={cn("form__span",
               { "form__span_logg": !buttonName })}>
               {buttonName ? "или" : ""}
-              <p className="form__link"
+              <span className="form__link"
                 onClick={changePopup}>
                 {name === "Вход" ?
                   " Зарегистрироваться" :
                   " Ввойти"}
-              </p>
+              </span>
             </span> :
             null}
         </form>

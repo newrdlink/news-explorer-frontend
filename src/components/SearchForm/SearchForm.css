@@ -22,8 +22,9 @@
 }
 
 .search-form__field:focus {
-  outline: none;  
+  outline: none;
 }
+
 .search-form__field::placeholder { 
   font-family: "Roboto", "Arial", sans-serif;
   font-style: normal;
@@ -31,6 +32,10 @@
   font-size: 16px;
   line-height: 22px;
   color: #B6BCBF;    
+}
+
+.search-form__field:focus::placeholder { 
+  color: #000;    
 }
 
 .search-form__button {
@@ -42,7 +47,7 @@
   height: 64px;
   width: 168px;
   background-color: #2F71E5;
-  font-family: Roboto;
+  font-family: "Roboto", "Arial", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -65,4 +70,62 @@
 
 .search-form__button:focus {
   outline: none;
+}
+
+@media screen and (max-width: 950px) {
+  .search-form {
+    margin-bottom: 48px;
+  }
+  .search-form__field {
+    height: 56px;
+  }
+  .search-form__button {
+    height: 56px;
+  }
+}
+
+@media screen and (max-width: 766px) {
+  .search-form {
+    margin-bottom: 38px;
+  }
+}
+
+@media screen and (max-width: 745px) {
+  .search-form {
+    margin-bottom: 28px;
+  }
+}
+
+@media screen and (max-width: 725px) {
+  .search-form {
+    margin-bottom: 18px;
+  }
+}
+
+@media screen and (max-width: 706px) {
+  .search-form {
+    margin-bottom: 8px;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .search-form {
+    margin-bottom: 18px;
+  }
+}
+
+@media screen and (max-width: 666px) {
+  .search-form {
+    margin-bottom: 18px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .search-form__button  {
+    top: 71px;
+    width: 100%;
+  }
+  .search-form {
+    
+  }
 }

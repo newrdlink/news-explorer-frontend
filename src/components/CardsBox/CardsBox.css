@@ -6,3 +6,15 @@
   flex-direction: row;
   flex-wrap: wrap;  
 }
+
+@media screen and (max-width: 1040px) {
+  .cards {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .cards {
+    justify-content: start;
+  }
+}

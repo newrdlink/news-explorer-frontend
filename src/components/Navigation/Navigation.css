@@ -12,3 +12,11 @@
   margin: 0;
   display: flex;
 }
+
+.navigation__items_place_mobile {  
+  position: absolute; 
+  
+  top: 70px; 
+  left: 16px;
+  flex-direction: column; 
+}

@@ -9,7 +9,7 @@ const Button = ({ userName, buttonName, place, currentPath, onClick, isLocked, t
     <button
       disabled={isLocked}
       type={type}
-      className={`button button_place_${place} 
+      className={`button button_place_${place}                  
                   ${isUserPage() && "button_place_header-dark"} 
                   ${isLocked && "button_place_auth-lock"}`}
       onClick={onClick}

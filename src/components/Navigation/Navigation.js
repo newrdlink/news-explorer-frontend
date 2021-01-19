@@ -6,7 +6,7 @@ const Navigation = ({ menuItems, place, currentUser = {} }) => {
   // console.log(currentUser.loggedIn)
   return (
     <nav className="navigation">
-      <ul className="navigation__items">
+      <ul className={`navigation__items ${place === "header-mobile" && "navigation__items_place_mobile"}`}>
 
         {menuItems.map((item) => {
 

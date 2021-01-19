@@ -1,4 +1,4 @@
-const cardsListSaved = [
+const cardsListSavedStatic = [
   {
     id: 1,
     source: {
@@ -183,7 +183,7 @@ const cardsListSaved = [
   // },
 ];
 
-const cardsListSearch = [
+const cardsListSearchStatic = [
   {
     id: 10,
     source: {
@@ -196,7 +196,7 @@ const cardsListSearch = [
     url: "https://seekingalpha.com/article/4395322-wall-street-breakfast-tesla-makes-grand-entrance-s-and-p-500",
     urlToImage: "https://static3.seekingalpha.com/assets/og_image_192-59bfd51c9fe6af025b2f9f96c807e46f8e2f06c5ae787b15bf1423e6c676d4db.png",
     publishedAt: "2020-12-18T12:08:22Z",
-    content: "The bulls and the bears\r\nBulls view Tesla (TSLA) CEO Elon Musk as a visionary that can push the company's disruptive technology ahead of its competitors. They also see Tesla posting above-average gai… [+5864 chars]"
+    content: "n Muski  ahead of its competitors. They also see Tesla posting above-average gai… [+5864 chars]"
   },
   {
     id: 11,
@@ -218,11 +218,11 @@ const cardsListSearch = [
     },
     author: "Bridie Wilson",
     title: "London-based cryptocurrency exchange CEX.IO celebrates seven years of innovation and growth",
-    description: "2013 was the year Bitcoin came of age as an investment vehicle. At the start of 2013 the digital currency\nThe post London-based cryptocurrency exchange CEX.IO celebrates seven years of innovation and growth appeared first on CityAM.",
+    description: "At the start of 2013 the digital currency\nThe post London-based cryptocurrency exchange CEX.IO celebrates seven years of innovation and growth appeared first on CityAM.",
     url: "https://www.cityam.com/london-based-cryptocurrency-exchange-cex-io-celebrates-seven-years-of-innovation-and-growth/",
     urlToImage: "https://www.cityam.com/wp-content/uploads/2020/12/image0.png",
     publishedAt: "2020-12-18T11:59:41Z",
-    content: "2013 was the year Bitcoin came of age as an investment vehicle. At the start of 2013 the digital currency was trading at around $13.50 per Bitcoin. By the end of November 2013, Bitcoin was trading at… [+6252 chars]"
+    content: "2013 was the year Bitcoin came of age as an investment vehicle… [+6252 chars]"
   },
   {
     id: 13,
@@ -252,4 +252,4 @@ const cardsListSearch = [
   },
 ]
 
-export { cardsListSaved, cardsListSearch };
+export { cardsListSavedStatic, cardsListSearchStatic };

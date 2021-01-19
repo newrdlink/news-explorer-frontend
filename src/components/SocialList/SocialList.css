@@ -13,3 +13,9 @@
 .social-list__item {
   margin-right: 28px;
 }
+
+@media screen and (max-width: 850px) {
+  .social-list__item {
+    margin-right: 26px;
+  }  
+}

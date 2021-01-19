@@ -7,7 +7,7 @@ import About from '../About/About';
 import Preloader from '../Preloader';
 import cn from 'classnames';
 import NewsCardList from '../NewsCardList/NewsCardList';
-import { cardsListSaved } from '../../config/cardsList';
+import { cardsListSavedStatic, cardsListSearchStatic } from '../../config/cardsList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
@@ -28,14 +28,20 @@ const App = () => {
   const [isRegOk, setIsRegOk] = useState(true)
 
   const [cardsListSearch, setCardsListSearch] = useState([])
+  const [cardsListSaved, setCardsListSaved] = useState([])
+  useEffect(() => {
+    setCardsListSearch(cardsListSearchStatic)
+    setCardsListSaved(cardsListSavedStatic)
+  }, [])
+
   // const history = useHistory();
   const [currentUser, setCurrentUser] = useState({
-    name: "",
-    loggedIn: false,
+    name: "NewUser",
+    loggedIn: true,
     savedNews: [],
   })
 
-
+  // console.log(cardsListSaved)
   useEffect(() => {
     const jwt = getToken()
     if (jwt) {
@@ -49,7 +55,7 @@ const App = () => {
           console.log(error)
         })
     }
-  }, [])
+  }, [cardsListSaved])
 
   const changePopup = () => {
     if (isOpenedSignIn) {
@@ -125,8 +131,8 @@ const App = () => {
             <About />
           </Route>
           <Route path="/saved-news">
-            <SavedNewsHeader />
-            <NewsCardList cardsList={currentUser.savedNews} />
+            <SavedNewsHeader cardsList={cardsListSaved} />
+            <NewsCardList cardsList={cardsListSaved} />
           </Route>
         </Switch>
         <RegIsOk

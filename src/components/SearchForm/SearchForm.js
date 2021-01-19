@@ -7,6 +7,7 @@ const SearchForm = ({ onSubmit }) => {
     <form className="search-form" onSubmit={onSubmit}>
       <input
         className="search-form__field"
+        required
         placeholder="Введите тему новости" />
       <button type="submit" className="search-form__button" >Искать</button>
     </form>
