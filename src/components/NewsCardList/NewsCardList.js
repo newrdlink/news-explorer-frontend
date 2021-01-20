@@ -10,7 +10,7 @@ const NewsCardList = ({ cardsList, isVisibleNews }) => {
 
   return (
     isVisibleNews || currentPath === "/saved-news" ?
-      <section className="news">
+      <section className={`news ${currentPath === "/saved-news" && "news_place_saved"}`}>
         {currentPath === "/" ?
           <h3 className="news__title">Результаты поиска</h3> :
           null}
