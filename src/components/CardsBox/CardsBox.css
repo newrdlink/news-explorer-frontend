@@ -7,14 +7,20 @@
   flex-wrap: wrap;  
 }
 
-@media screen and (max-width: 1040px) {
+@media screen and (max-width: 1439px) {
   .cards {
-    justify-content: space-between;
+    justify-content: space-around;
+  }
+}
+
+/* @media screen and (max-width: 1040px) {
+  .cards {
+    justify-content: space-around;
   }
 }
 
 @media screen and (max-width: 850px) {
   .cards {
-    justify-content: start;
+    justify-content: space-around;
   }
-}
+} */

@@ -206,13 +206,48 @@
     /* margin: 0 8px 8px 0; */
     /* margin: 0 8px 8px 0;       */
   }
+  .card__src {
+    left: 16px;
+  }
 }
 
 @media screen and (max-width: 650px) {
   .card {
     width: 288px; 
+    margin: 0 8px 8px 0;
+  }
+  .card:nth-of-type(3n) {
+    margin: 0 8px 8px 0;
+  }
+  .card:nth-of-type(2n) {
     margin: 0 0 8px 0;
+  }
+}
+
+@media screen and (max-width: 615px) {
+  .card {     
+    margin: 0 10px 8px 0;
     /* margin: 0 8px 8px 0; */
     /* margin: 0 8px 8px 0;       */
+  }
+  .card:nth-of-type(3n) {
+    margin: 0 10px 8px 0;
+  }
+
+  .card:nth-of-type(2n) {
+    margin: 0 10px 8px 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .card {     
+    margin: 0 0 10px 0;
+  }
+  .card:nth-of-type(3n) {
+    margin: 0 0 10px 0;
+  }
+
+  .card:nth-of-type(2n) {
+    margin: 0 0 10px 0;
   }
 }
