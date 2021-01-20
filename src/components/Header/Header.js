@@ -25,6 +25,7 @@ const Header = ({ onAuth, currentUser, logOut }) => {
           place="header-mobile"
           onAuth={onAuth}
           logOut={logOut}
+          currentPath={currentPath}
         /> :
         <Navigation
           menuItems={menuItems}

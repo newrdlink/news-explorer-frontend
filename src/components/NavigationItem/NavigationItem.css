@@ -47,6 +47,8 @@
   content: "";
 }
 
+
+
 .item__link_place_header-mobile::before {
   height: 0;
   width: 0;
@@ -68,6 +70,10 @@
 .item__link_theme_black {
   color: black;
 }
+
+.item__link_place_header-mobile {
+  color: white; 
+ }
 
 @media screen and (max-width: 800px) {
   .item__link {

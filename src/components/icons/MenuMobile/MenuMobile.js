@@ -19,7 +19,7 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut }) => {
     setIsActive(false)
     setIsActiveContent(false)
   }
-
+  console.log(currentPath)
   return (
     <>
       <div className={`menu__mobile-content ${isActive && "menu__mobile-content_active"}`}>
@@ -34,7 +34,9 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut }) => {
       </div>
       {isActive ?
         <CloseMenuMobile onClick={closeOnClick} /> :
-        <OpenMenuMobile onClick={onClick} />}
+        <OpenMenuMobile 
+        onClick={onClick} 
+        currentPath={currentPath}/>}
     </>
   )
 }

@@ -4,7 +4,7 @@
   left: 0;
   color:white;
   background: #1A1B22;
-  border-radius: 16px;
+  border-radius: 0 0 16px 16px;
   height: 0;
   width: 100%;
   z-index: -1;
