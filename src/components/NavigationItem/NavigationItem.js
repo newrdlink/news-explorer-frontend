@@ -11,11 +11,15 @@ const NavigationItem = ({ name, path, place, mobileHandler }) => {
 
   const isMobile = useWindowSize() < 500
 
-  // const clickOnMobile = console.log(1)
+  const clickOnMobile = () => {
+    if (isMobile) {
+      mobileHandler()
+    }
+  }
 
   return (
     <li className={`item ${place === "header-mobile" && "item_place_header-mobile"}`}>
-      <NavLink to={path} exact onClick={(isMobile && mobileHandler) || null}
+      <NavLink to={path} exact onClick={clickOnMobile}
         className={cn("item__link",
           { "item__link_theme_black": place === 'footer' || currentPath === "/saved-news" },
           { "item__link_place_footer": place === 'footer' },
