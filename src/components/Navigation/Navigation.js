@@ -2,7 +2,7 @@ import React from 'react';
 import './Navigation.css';
 import NavigationItem from '../NavigationItem/NavigationItem';
 
-const Navigation = ({ menuItems, place, currentUser = {} }) => {
+const Navigation = ({ menuItems, place, currentUser = {}, mobileHandler }) => {
   // console.log(currentUser.loggedIn)
   return (
     <nav className="navigation">
@@ -17,7 +17,8 @@ const Navigation = ({ menuItems, place, currentUser = {} }) => {
               key={id}
               name={name}
               path={path}
-              place={place} />
+              place={place}
+              mobileHandler={mobileHandler} />
           } return null
         })}
 

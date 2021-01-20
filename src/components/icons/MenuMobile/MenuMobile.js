@@ -15,18 +15,22 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut }) => {
     setIsActive(true)
     setTimeout(() => setIsActiveContent(true), 400)
   }
+  
   const closeOnClick = () => {
     setIsActive(false)
     setIsActiveContent(false)
   }
-  console.log(currentPath)
+  
   return (
     <>
       <div className={`menu__mobile-content ${isActive && "menu__mobile-content_active"}`}>
-        {isActiveContent ? <Navigation
-          place={place}
-          menuItems={menuItems}
-          currentUser={currentUser} /> : null}
+        {isActiveContent ?
+          <Navigation
+            place={place}
+            menuItems={menuItems}
+            currentUser={currentUser}
+            mobileHandler={() => closeOnClick()} /> :
+          null}
         {isActiveContent ?
           <Button place={place}
             onClick={currentUser.loggedIn ? logOut : onAuth} /> :
@@ -34,9 +38,9 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut }) => {
       </div>
       {isActive ?
         <CloseMenuMobile onClick={closeOnClick} /> :
-        <OpenMenuMobile 
-        onClick={onClick} 
-        currentPath={currentPath}/>}
+        <OpenMenuMobile
+          onClick={onClick}
+          currentPath={currentPath} />}
     </>
   )
 }
