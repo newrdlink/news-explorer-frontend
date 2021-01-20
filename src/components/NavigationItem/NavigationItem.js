@@ -15,7 +15,7 @@ const NavigationItem = ({ name, path, place, mobileHandler }) => {
 
   return (
     <li className={`item ${place === "header-mobile" && "item_place_header-mobile"}`}>
-      <NavLink to={path} exact onClick={isMobile && mobileHandler}
+      <NavLink to={path} exact onClick={(isMobile && mobileHandler) || null}
         className={cn("item__link",
           { "item__link_theme_black": place === 'footer' || currentPath === "/saved-news" },
           { "item__link_place_footer": place === 'footer' },
