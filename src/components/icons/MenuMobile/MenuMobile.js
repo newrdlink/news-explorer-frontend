@@ -32,7 +32,9 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut }) => {
             onClick={currentUser.loggedIn ? logOut : onAuth} /> :
           null}
       </div>
-      {isActive ? <CloseMenuMobile onClick={closeOnClick} /> : <OpenMenuMobile onClick={onClick} />}
+      {isActive ?
+        <CloseMenuMobile onClick={closeOnClick} /> :
+        <OpenMenuMobile onClick={onClick} />}
     </>
   )
 }

@@ -1,4 +1,5 @@
 .header {
+  position: relative;
   display: grid;
   grid-template-columns: min-content 1fr min-content;
   grid-template-rows: min-content;
@@ -10,10 +11,10 @@
   z-index: 20;
 }
 
-/* .header_place_mobile {
-  
+.header_place_mobile {  
+  z-index: 100;
 }
-
+/*
 .header_place_mobile::before {
   position: absolute;
   top: 0;

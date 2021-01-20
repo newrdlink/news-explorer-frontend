@@ -152,3 +152,27 @@
   color: #FF0000;
   padding-bottom: 8px;
 }
+
+
+@media screen and (max-width: 500px) {
+  .popup {    
+    z-index: 200;    
+  }
+  .popup__close {
+    right: 25px;
+    top: -35px;
+    height: 14px;
+    width: 14px;
+  }
+  .popup__container {
+    position: absolute;
+    bottom: 0;
+    padding: 17px 16px;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    
+  }
+  .form {
+    padding-bottom: 200px;
+  }
+}
