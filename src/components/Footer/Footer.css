@@ -46,7 +46,7 @@
 
 @media screen and (max-width: 500px) {
   .footer {
-    margin: 0 0 26px 0;
+    margin: 0;
     padding: 16px;
     display: grid;
     grid-template-columns: max-content;
