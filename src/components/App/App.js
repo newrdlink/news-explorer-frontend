@@ -122,13 +122,18 @@ const App = () => {
   }
   useEffect(() => {
     setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
-    console.log(cardsListSearchFull)
-    console.log(cardsListSearch)
+    // console.log(cardsListSearchFull)
+    // console.log(cardsListSearch)
   }, [cardsListSearchFull, countCards])
 
   const logOut = () => {
     // history.goBack()
     setCurrentUser({ loggedIn: false })
+  }
+
+  const onClickLoadCards = () => {
+    console.log(countCards)
+    setCountCards(countCards + 3)
   }
 
   return (
@@ -144,7 +149,8 @@ const App = () => {
             {cardsListSearch.length === 0 ?
               <NotFound isVisibleNews={isVisibleNews} /> :
               <NewsCardList cardsList={cardsListSearch}
-                isVisibleNews={isVisibleNews} />}
+                isVisibleNews={isVisibleNews}
+                onClickLoadCards={onClickLoadCards} />}
             <About />
           </Route>
           <Route path="/saved-news">
