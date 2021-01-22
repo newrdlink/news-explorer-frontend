@@ -3,6 +3,7 @@ import './CardsBox.css';
 import NewsCard from '../NewsCard/NewsCard';
 
 const CardsBox = ({ cardsList = [], currentPath }) => {
+  // console.log(cardsList)
 
   return (
     <ul className="cards">

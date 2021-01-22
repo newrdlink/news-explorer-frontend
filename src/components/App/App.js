@@ -7,7 +7,7 @@ import About from '../About/About';
 import Preloader from '../Preloader';
 import cn from 'classnames';
 import NewsCardList from '../NewsCardList/NewsCardList';
-import { cardsListSavedStatic, cardsListSearchStatic } from '../../config/cardsList';
+import { cardsListSavedStatic } from '../../config/cardsList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
@@ -16,7 +16,10 @@ import { Switch, Route } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
 import { setToken, getToken, removeToken } from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
+import newsApi from "../../utils/NewsApi";
 import NotFound from '../NotFound/NotFound';
+import addIdCard from '../../helpers/addIdCard'
+import countCardsHandler from '../../helpers/addThirdCard';
 
 
 const App = () => {
@@ -27,20 +30,21 @@ const App = () => {
   const [isVisibleNews, setIsVisibleNews] = useState(false);
   const [isRegOk, setIsRegOk] = useState(true)
 
+  const [cardsListSearchFull, setCardsListSearchFull] = useState([])
+  const [countCards, setCountCards] = useState(3);
   const [cardsListSearch, setCardsListSearch] = useState([])
   const [cardsListSaved, setCardsListSaved] = useState([])
+
   useEffect(() => {
-    setCardsListSearch(cardsListSearchStatic)
+    // setCardsListSearchFull(cardsListSearchFullStatic)
     setCardsListSaved(cardsListSavedStatic)
   }, [])
-
   // const history = useHistory();
   const [currentUser, setCurrentUser] = useState({
-    name: "NewUser",
-    loggedIn: true,
+    name: "",
+    loggedIn: false,
     savedNews: [],
   })
-
   // console.log(cardsListSaved)
   useEffect(() => {
     const jwt = getToken()
@@ -108,7 +112,19 @@ const App = () => {
   const searchReq = (evt) => {
     evt.preventDefault()
     setIsVisibleNews(true)
+
+    newsApi.testReqNews()
+      .then((res) => {
+        if (res.status) {
+          setCardsListSearchFull(addIdCard(res.articles))
+        }
+      })
   }
+  useEffect(() => {
+    setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
+    console.log(cardsListSearchFull)
+    console.log(cardsListSearch)
+  }, [cardsListSearchFull, countCards])
 
   const logOut = () => {
     // history.goBack()
@@ -127,7 +143,8 @@ const App = () => {
             <Main searchReq={searchReq} />
             {cardsListSearch.length === 0 ?
               <NotFound isVisibleNews={isVisibleNews} /> :
-              <NewsCardList cardsList={cardsListSearch} isVisibleNews={isVisibleNews} />}
+              <NewsCardList cardsList={cardsListSearch}
+                isVisibleNews={isVisibleNews} />}
             <About />
           </Route>
           <Route path="/saved-news">

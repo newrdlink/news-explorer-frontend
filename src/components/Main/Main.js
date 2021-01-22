@@ -9,7 +9,8 @@ const Main = ({ searchReq }) => {
 
   return (
     <main className="main">
-      <img className="main__image" src={useWindowSize() < 650 ? mobileImg : mainImg} alt="Главное изображение" />
+      <img className="main__image"
+        src={useWindowSize() < 650 ? mobileImg : mainImg} alt="Главное изображение" />
       <div className="main__content">
         <h1 className={`main__title ${useWindowSize() < 650 && "main__title_place_mobile"}`} >Что творится в мире?</h1>
         <p className={`main__subtitle ${useWindowSize() < 650 && "main__subtitle_place_mobile"}`}>
