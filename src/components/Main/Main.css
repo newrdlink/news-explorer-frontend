@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   max-height: 400px;
-  z-index: -100;  
+  z-index: 10;  
   /* background-color: #F5F6F7; */
 }
 

@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import About from '../About/About';
-import Preloader from '../Preloader';
+// import Preloader from '../Preloader';
 import cn from 'classnames';
 import NewsCardList from '../NewsCardList/NewsCardList';
 import { cardsListSavedStatic } from '../../config/cardsList';
@@ -17,10 +17,11 @@ import { UserContext } from "../../contexts/UserContext";
 import { setToken, getToken, removeToken } from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
 import newsApi from "../../utils/NewsApi";
-import NotFound from '../NotFound/NotFound';
+// import NotFound from '../NotFound/NotFound';
 import addIdCard from '../../helpers/addIdCard'
 import countCardsHandler from '../../helpers/addThirdCard';
-
+import ResultSearch from '../ResultSearch/ResultSearch';
+import PreloaderNews from '../PreloaderNews/PreloaderNews';
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -109,25 +110,30 @@ const App = () => {
       })
   }
 
-  const searchReq = (evt) => {
-    evt.preventDefault()
-    setIsVisibleNews(true)
+  const searchReq = (req) => {
+    console.log(req)
+    if (countCards > 3) {
+      setCountCards(3)
+    }
 
-    newsApi.testReqNews()
+    setIsloading(true)
+    // newsApi.testReqNews()
+    newsApi.searchByRequest(req)
       .then((res) => {
+        setIsloading(true)
         if (res.status) {
           setCardsListSearchFull(addIdCard(res.articles))
         }
+        setIsloading(false)
+        setIsVisibleNews(true)
       })
   }
+
   useEffect(() => {
     setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
-    // console.log(cardsListSearchFull)
-    // console.log(cardsListSearch)
   }, [cardsListSearchFull, countCards])
 
   const logOut = () => {
-    // history.goBack()
     setCurrentUser({ loggedIn: false })
   }
 
@@ -139,18 +145,19 @@ const App = () => {
   return (
     <UserContext.Provider value={currentUser}>
       <div className={cn("app", { "app_visible": true })}>
-        <Preloader isLoading={isLoading} />
+        {/* <Preloader
+          isLoading={isLoading} /> */}
         <Header onAuth={() => setIsOpenedSignIn(true)}
           logOut={logOut}
           currentUser={currentUser} />
         <Switch>
           <Route path="/" exact>
             <Main searchReq={searchReq} />
-            {cardsListSearch.length === 0 ?
-              <NotFound isVisibleNews={isVisibleNews} /> :
-              <NewsCardList cardsList={cardsListSearch}
-                isVisibleNews={isVisibleNews}
-                onClickLoadCards={onClickLoadCards} />}
+            {isVisibleNews ? <ResultSearch
+              isAreResult={cardsListSearch.length}
+              cardsList={cardsListSearch}
+              onClickLoadCards={onClickLoadCards}
+              isVisibleNews={isVisibleNews} /> : ((isLoading && <PreloaderNews />) || null)}
             <About />
           </Route>
           <Route path="/saved-news">

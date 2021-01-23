@@ -3,8 +3,9 @@ import SadSmile from '../icons/SadSmile/SadSmile';
 import './NotFound.css'
 
 const NotFound = ({ isVisibleNews }) => {
+  // console.log(isVisibleNews)
   return (
-    isVisibleNews ? 
+    !isVisibleNews ? 
     <section className="not-found">
       <SadSmile />
       <h3 className="not-found__title">Ничего не найдено</h3>
