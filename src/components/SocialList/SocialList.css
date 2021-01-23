@@ -1,0 +1,30 @@
+.social-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.social-list :last-child{
+  margin-right: 0;
+}
+
+.social-list__item {
+  margin-right: 28px;
+}
+
+@media screen and (max-width: 850px) {
+  .social-list__item {
+    margin-right: 26px;
+  }  
+}
+
+
+@media screen and (max-width: 500px) {
+  .social-list {   
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 30px;
+  }
+}

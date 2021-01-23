@@ -1,0 +1,12 @@
+@import url(./vendor/fonts.css) ;
+
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}

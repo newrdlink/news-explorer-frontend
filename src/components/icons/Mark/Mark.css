@@ -1,0 +1,8 @@
+.mark {
+  width: 23px;
+  height: 22px;
+}
+
+.mark:hover {
+  cursor: pointer;
+}

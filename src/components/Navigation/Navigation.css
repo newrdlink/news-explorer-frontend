@@ -1,0 +1,29 @@
+.navigation {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.navigation__items_place_mobile {  
+  position: absolute;   
+  top: 70px; 
+  left: 16px;
+  flex-direction: column; 
+}
+
+@media screen and (max-width: 500px) {
+  .navigation {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+}

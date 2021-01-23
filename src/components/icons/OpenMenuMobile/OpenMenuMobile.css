@@ -1,0 +1,9 @@
+.menu-mobile-open {
+  width: 24px;
+  height: 24px;
+  justify-self: end;
+}
+
+.menu-mobile-open:hover {
+  cursor: pointer;
+}
