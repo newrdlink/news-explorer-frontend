@@ -16,6 +16,7 @@ const month = {
 }
 
 export const dateStr = (date) => {
+ // console.log(date)
   const str = date.slice(0, 10);
   const dateObj = moment(str, "YYYY-MM-DD");
   const dateStr = dateObj._d.getDate() + ' ' + month[dateObj._d.getMonth()] + ', ' + dateObj._d.getFullYear()

@@ -6,30 +6,33 @@ import Basket from '../icons/Basket/Basket';
 import Mark from '../icons/Mark/Mark'
 import { UserContext } from '../../contexts/UserContext';
 
-const NewsCard = ({ card, currentPath }) => {
+const NewsCard = ({ card, currentPath, addCardToFav }) => {
 
   const [isOverMark, setIsOverMark] = useState(false)
   const [isMarked, setIsMarked] = useState(false)
 
   const currentUser = React.useContext(UserContext);
-
+  // console.log(card)
   const {
     url: urlToSourceNews,
     urlToImage,
-    publishedAt: date,
+    _id,
+    date,
     title,
     owner,
     content,
     source: { name: sourceName }
   } = card;
-
-  const currentDayPub = dateStr(date);
+  console.log(date)
+  const currentDayPub = dateStr(date || "");
 
   useEffect(() => {
     const handleOwner = () => currentUser.name === owner ? setIsMarked(true) : null
     handleOwner()
   }, [owner, currentUser.name])
 
+  const onClickHandler = () => addCardToFav(_id)
+  // console.log(card)
   return (
     <li className='card'>
       <a className="card__link"
@@ -40,22 +43,28 @@ const NewsCard = ({ card, currentPath }) => {
           alt={`Фотография для ${title}`}
           src={urlToImage} />
       </a>
-      <div className={cn("card__message-box card__message-box_type_theme", { "visible": currentUser.loggedIn })}>
+      <div className={cn("card__message-box card__message-box_type_theme",
+        { "visible": currentUser.loggedIn && currentPath === "/saved-news" })}>
         <span className="card__message">Природа</span>
       </div>
-      <div className={cn("card__message-box card__message-box_type_user", { "visible": isOverMark })}>
-        <span className="card__message">{currentUser.loggedIn ? "Убрать из сохранённых" : "Войдите, чтобы сохранять статьи"}</span>
+      <div className={cn("card__message-box card__message-box_type_user",
+        { "visible": isOverMark })}>
+        <span className="card__message">{currentUser.loggedIn ?
+          (1 && "Добавить") || "Убрать из сохранённых" :
+          "Войдите, чтобы сохранять статьи"}</span>
       </div>
       <button type="button"
         className={cn("card__mark",
           // { "card__mark_type_marked": author === 'alexmark' },
           // { "card__mark_type_unmarked": isMarked }
         )}
+        onClick={onClickHandler}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?
           <Basket isOver={isOverMark} /> :
-          <Mark isOver={isOverMark} isMarked={isMarked} />}
+          <Mark isOver={isOverMark}
+            isMarked={isMarked} />}
       </button>
       <div className="card__content">
         <p className="card__date">{currentDayPub}</p>

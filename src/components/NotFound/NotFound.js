@@ -1,16 +1,15 @@
 import React from 'react';
-import SadSmile from '../icons/SadSmile/SadSmile';
 import './NotFound.css'
+import NotFoundError from '../NotFoundError/NotFoundError'
 
-const NotFound = ({ isVisibleNews }) => {
-  // console.log(isVisibleNews)
+const NotFound = ({ isVisibleNews, isServerError }) => {
+
   return (
-    !isVisibleNews ? 
-    <section className="not-found">
-      <SadSmile />
-      <h3 className="not-found__title">Ничего не найдено</h3>
-      <p className="not-found__subtitle">К сожалению по вашему запросу ничего не найдено.</p>
-    </section> : null
+    <>
+      {!isVisibleNews && !isServerError ?
+        <NotFoundError isServerError={isServerError} /> :
+        <NotFoundError isServerError={isServerError} />}
+    </>
   )
 }
 

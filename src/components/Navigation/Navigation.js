@@ -2,7 +2,7 @@ import React from 'react';
 import './Navigation.css';
 import NavigationItem from '../NavigationItem/NavigationItem';
 
-const Navigation = ({ menuItems, place, currentUser = {}, mobileHandler }) => {
+const Navigation = ({ menuItems, place, mobileHandler, loggedIn }) => {
   // console.log(currentUser.loggedIn)
   return (
     <nav className="navigation">
@@ -12,7 +12,7 @@ const Navigation = ({ menuItems, place, currentUser = {}, mobileHandler }) => {
 
           const { id, name, path } = item
 
-          if (currentUser.loggedIn || path === '/') {
+          if (loggedIn || path === '/') {
             return <NavigationItem
               key={id}
               name={name}

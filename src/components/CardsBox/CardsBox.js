@@ -2,12 +2,15 @@ import React from 'react';
 import './CardsBox.css';
 import NewsCard from '../NewsCard/NewsCard';
 
-const CardsBox = ({ cardsList = [], currentPath }) => {
-  // console.log(cardsList)
-
+const CardsBox = ({ cardsList = [], currentPath, addCardToFav }) => {
+  console.log(cardsList)
   return (
     <ul className="cards">
-      {cardsList.map((card) => <NewsCard key={card.id} card={card} currentPath={currentPath} />)}
+      {cardsList.map((card) => <NewsCard
+        key={card._id || card.id}
+        card={card}
+        addCardToFav={addCardToFav}
+        currentPath={currentPath} />)}
     </ul>
   )
 }

@@ -3,25 +3,37 @@ import './NewsCardList.css';
 import CardsBox from '../CardsBox/CardsBox';
 import { useLocation } from 'react-router-dom';
 
-const NewsCardList = ({ cardsList, isVisibleNews, onClickLoadCards }) => {
+const NewsCardList = ({
+  cardsList = [],
+  cardsListSearchFull = [],
+  isVisibleNews,
+  onClickLoadCards,
+  addCardToFav }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
 
+  const isAllCards = cardsList.length === cardsListSearchFull.length
+   // console.log(1, cardsList)
   return (
-    isVisibleNews || currentPath === "/saved-news" ?
-      <section className={`news ${currentPath === "/saved-news" && "news_place_saved"}`}>
-        {currentPath === "/" ?
-          <h3 className="news__title">Результаты поиска</h3> :
-          null}
-        <CardsBox cardsList={cardsList} currentPath={currentPath} />
-        {currentPath === "/saved-news" ?
-          null :
-          <button type="button"
-            className="news__button"
-            onClick={onClickLoadCards}>Показать еще</button>}
-      </section> :
-      null
+    <>
+      {isVisibleNews || currentPath === "/saved-news" ?
+        <section className={`news ${currentPath === "/saved-news" && "news_place_saved"}`}>
+          {currentPath === "/" ?
+            <h3 className="news__title">Результаты поиска</h3> :
+            null}
+          <CardsBox
+            cardsList={cardsList}
+            addCardToFav={addCardToFav}
+            currentPath={currentPath} />
+          {currentPath === "/saved-news" ?
+            null :
+            isAllCards || <button type="button"
+              className="news__button"
+              onClick={onClickLoadCards}>Показать еще</button>}
+        </section> :
+        null}
+    </>
   )
 }
 

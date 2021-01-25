@@ -7,7 +7,7 @@ import About from '../About/About';
 // import Preloader from '../Preloader';
 import cn from 'classnames';
 import NewsCardList from '../NewsCardList/NewsCardList';
-import { cardsListSavedStatic } from '../../config/cardsList';
+// import { cardsListSavedStatic } from '../../config/cardsList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
@@ -16,12 +16,14 @@ import { Switch, Route } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
 import { setToken, getToken, removeToken } from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
+import api from "../../utils/Api";
 import newsApi from "../../utils/NewsApi";
 // import NotFound from '../NotFound/NotFound';
 import addIdCard from '../../helpers/addIdCard'
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
+import fun from '../../helpers/renameKeyDate';
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -31,36 +33,38 @@ const App = () => {
   const [isVisibleNews, setIsVisibleNews] = useState(false);
   const [isRegOk, setIsRegOk] = useState(true)
 
+  const [isServerError, setIsServerError] = useState(false);
+  const [keyWord, setKeyWord] = useState("");
+
   const [cardsListSearchFull, setCardsListSearchFull] = useState([])
   const [countCards, setCountCards] = useState(3);
   const [cardsListSearch, setCardsListSearch] = useState([])
-  const [cardsListSaved, setCardsListSaved] = useState([])
+  const [loggedIn, setLoggedIn] = useState(false)
 
-  useEffect(() => {
-    // setCardsListSearchFull(cardsListSearchFullStatic)
-    setCardsListSaved(cardsListSavedStatic)
-  }, [])
   // const history = useHistory();
-  const [currentUser, setCurrentUser] = useState({
-    name: "",
-    loggedIn: false,
-    savedNews: [],
-  })
-  // console.log(cardsListSaved)
+  const [currentUser, setCurrentUser] = useState({})
+
   useEffect(() => {
     const jwt = getToken()
     if (jwt) {
-      apiAuth.pullUserData(jwt)
+      api.getAppStartInfo(jwt)
         .then((res) => {
-          setCurrentUser((currentUser) => (
-            { ...currentUser, "name": res.name, "loggedIn": true, "savedNews": cardsListSaved }))
+          const [user, cards] = res
+          setCurrentUser({
+            "savedCards": cards,
+            "name": user.name,
+            "email": user.email
+          })
+          setLoggedIn(true)
         })
         .catch((error) => {
-          removeToken()
+          // removeToken()
+          // setLoggedIn(false)
+          // setCurrentUser({})
           console.log(error)
         })
     }
-  }, [cardsListSaved])
+  }, [])
 
   const changePopup = () => {
     if (isOpenedSignIn) {
@@ -78,16 +82,13 @@ const App = () => {
   }
 
   const onSubmitSignIn = (data) => {
-    setIsloading(true)
+    // setIsloading(true)
+    // console.log(data)
     apiAuth.signIn(data)
       .then((res) => {
         setToken(res.token)
-        apiAuth.pullUserData(res.token)
-          .then((res) => {
-            setCurrentUser((currentUser) => (
-              { ...currentUser, "name": res.name, "loggedIn": true, "savedNews": cardsListSaved }))
-            setIsOpenedSignIn(false)
-          })
+        setLoggedIn(true)
+        setIsOpenedSignIn(false)
       }
       )
       .catch((error) => console.log(error))
@@ -111,9 +112,14 @@ const App = () => {
   }
 
   const searchReq = (req) => {
-    console.log(req)
+    // console.log(req)
+    setKeyWord(req)
+    setIsServerError(false)
     if (countCards > 3) {
       setCountCards(3)
+    }
+    if (isVisibleNews) {
+      setIsVisibleNews(false)
     }
 
     setIsloading(true)
@@ -127,6 +133,10 @@ const App = () => {
         setIsloading(false)
         setIsVisibleNews(true)
       })
+      .catch((err) => {
+        setIsloading(false)
+        setIsServerError(true)
+      })
   }
 
   useEffect(() => {
@@ -134,12 +144,24 @@ const App = () => {
   }, [cardsListSearchFull, countCards])
 
   const logOut = () => {
-    setCurrentUser({ loggedIn: false })
+    // removeToken()
+    // setCurrentUser({})
   }
 
   const onClickLoadCards = () => {
     console.log(countCards)
     setCountCards(countCards + 3)
+  }
+
+  const addCardToFav = (idCard) => {
+    // console.log(cardsListSearchFull)
+    const сard = cardsListSearchFull.find((item) => item.id === idCard);
+    сard.keyword = keyWord;
+    console.log(сard)
+    const jwt = getToken()
+    api.addNewCard(сard, jwt)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error))
   }
 
   return (
@@ -149,20 +171,29 @@ const App = () => {
           isLoading={isLoading} /> */}
         <Header onAuth={() => setIsOpenedSignIn(true)}
           logOut={logOut}
+          loggedIn={loggedIn}
           currentUser={currentUser} />
         <Switch>
           <Route path="/" exact>
             <Main searchReq={searchReq} />
-            {isVisibleNews ? <ResultSearch
-              isAreResult={cardsListSearch.length}
-              cardsList={cardsListSearch}
-              onClickLoadCards={onClickLoadCards}
-              isVisibleNews={isVisibleNews} /> : ((isLoading && <PreloaderNews />) || null)}
+            {isVisibleNews || isServerError ?
+              <ResultSearch
+                addCardToFav={addCardToFav}
+                isServerError={isServerError}
+                isAreResult={cardsListSearch.length}
+                cardsList={fun(cardsListSearch)}
+                cardsListSearchFull={cardsListSearchFull}
+                onClickLoadCards={onClickLoadCards}
+                isVisibleNews={isVisibleNews} /> :
+              ((isLoading && <PreloaderNews />) || null)}
             <About />
           </Route>
           <Route path="/saved-news">
-            <SavedNewsHeader cardsList={cardsListSaved} />
-            <NewsCardList cardsList={cardsListSaved} />
+            <SavedNewsHeader
+              cardsList={currentUser.savedCards} />
+            <NewsCardList
+              cardsListSearchFull={fun(cardsListSearchFull)}
+              cardsList={currentUser.savedCards} />
           </Route>
         </Switch>
         <RegIsOk

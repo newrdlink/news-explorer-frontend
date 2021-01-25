@@ -2,7 +2,7 @@ import React from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import './SavedNewsHeader.css'
 
-const SavedNewsHeader = ({ cardsList }) => {
+const SavedNewsHeader = ({ cardsList = [] }) => {
 
   const user = React.useContext(UserContext);
   // console.log(cardsList)

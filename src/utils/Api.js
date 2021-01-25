@@ -1,4 +1,5 @@
 import React from "react";
+import handleResponse from "./utils";
 
 class Api extends React.Component {
   constructor({ address, headers }) {
@@ -7,29 +8,30 @@ class Api extends React.Component {
     this.headers = headers;
   }
 
-  // getAppStartInfo(token) {
-  //   return Promise.all([this.getUserData(token), this.getInitialCards(token)]);
-  // }
+  getAppStartInfo(token) {
+    return Promise.all([this.getUserData(token), this.getInitialCards(token)]);
+  }
 
-  // getUserData(token) {
-  //   return fetch(`${this.address}/users/me`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //   }).then(handleResponse);
-  // }
+  getUserData(token) {
+    return fetch(`${this.address}/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+    }).then(handleResponse);
+  }
 
-  // getInitialCards(token) {
-  //   return fetch(`${this.address}/cards`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //   }).then(handleResponse);
-  // }
+
+  getInitialCards(token) {
+    return fetch(`${this.address}/articles`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+    }).then(handleResponse);
+  }
 
   // patchUserData(data, token) {
   //   return fetch(`${this.address}/users/me`, {
@@ -45,19 +47,24 @@ class Api extends React.Component {
   //   }).then(handleResponse);
   // }
 
-  // addNewCard(data, token) {
-  //   return fetch(`${this.address}/cards`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //     body: JSON.stringify({
-  //       name: data.name,
-  //       link: data.link,
-  //     }),
-  //   }).then(handleResponse);
-  // }
+  addNewCard(data, token) {
+    return fetch(`${this.address}/articles`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        link: data.url,
+        keyword: data.keyword,
+        title: data.title,
+        text: data.content || "У этой статьи, почему-то нет текста (",
+        date: data.publishedAt,
+        source: data.source.name,
+        image: data.urlToImage,
+      }),
+    }).then(handleResponse);
+  }
 
   // changeAvatar(data, token) {
   //   return fetch(`${this.address}/users/me/avatar`, {
@@ -104,7 +111,7 @@ class Api extends React.Component {
 }
 //создаем экземпляр API
 const api = new Api({
-  address: "https://api.dr14.students.nomoredomains.work",
+  address: "https://api.news.wd-rd.ru",
   headers: {
     "Content-Type": "application/json",
   },
