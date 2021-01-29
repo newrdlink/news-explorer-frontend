@@ -1,0 +1,16 @@
+.message {  
+  padding: 0 10px;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;  
+  text-align: center;  
+  color: #000;  
+}
+
+@media screen and (max-width: 1040px) { 
+  .message {
+    padding: 8px 12px;
+  }
+}

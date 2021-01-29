@@ -95,10 +95,7 @@
   transition: background-image 0.15s ease-in;
 }
 
-.card__mark_type_unmarked {
-  background: url(../../images/bookmark.svg) #fff no-repeat center; 
-  transition: background-image 0.15s ease-in;
-}
+
 
 .card__mark_type_unmarked:hover {
   background-image: url(../../images/bookmark2.svg);
@@ -111,6 +108,11 @@
 
 .card__mark_type_marked {
   background: url(../../images/bookmark3.svg) #fff no-repeat center; 
+}
+
+.card__mark_type_unmarked {
+  background: url(../../images/bookmark.svg) #fff no-repeat center; 
+  transition: background-image 0.15s ease-in;
 }
 
 .card__mark_type_marked:hover{

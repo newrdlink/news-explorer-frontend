@@ -6,18 +6,25 @@ import NotFound from '../NotFound/NotFound';
 // import PreloaderNews from '../PreloaderNews/PreloaderNews';
 
 const ResultSearch = ({
+  savedCards,
+  loggedIn,
   isAreResult,
-  addCardToFav,
+  addCard,
+  removeCard,
   cardsList,
   onClickLoadCards,
   isVisibleNews,
   isServerError,
   cardsListSearchFull }) => {
-  console.log(1)
+  // console.log(cardsList)
+
   return (isAreResult ?
     <NewsCardList
-      addCardToFav={addCardToFav}
+      loggedIn={loggedIn}
+      addCard={addCard}
+      removeCard={removeCard}
       cardsList={cardsList}
+      savedCards={savedCards}
       cardsListSearchFull={cardsListSearchFull}
       onClickLoadCards={onClickLoadCards}
       isVisibleNews={isVisibleNews} /> :

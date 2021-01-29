@@ -13,7 +13,8 @@ const Header = ({ onAuth, currentUser, logOut, loggedIn }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
-
+  // console.log(currentUser)
+  // const { userName } = currentUser
   return (
     <header className={cn("header",
       { "header_logged": currentPath === "/saved-news" },
@@ -34,7 +35,9 @@ const Header = ({ onAuth, currentUser, logOut, loggedIn }) => {
           loggedIn={loggedIn}
         />}
       {useWindowSize() < 690 ? null :
-        <Button place="header"
+        <Button
+          currentUser={currentUser}
+          place="header"
           userName={currentUser.name}
           currentPath={currentPath}
           onClick={loggedIn ? logOut : onAuth}

@@ -26,13 +26,16 @@ const MenuMobile = ({ currentUser, currentPath, place, onAuth, logOut, loggedIn 
       <div className={`menu__mobile-content ${isActive && "menu__mobile-content_active"}`}>
         {isActiveContent ?
           <Navigation
+            loggedIn={loggedIn}
             place={place}
             menuItems={menuItems}
             currentUser={currentUser}
             mobileHandler={() => closeOnClick()} /> :
           null}
         {isActiveContent ?
-          <Button place={place}
+          <Button
+            userName={currentUser.name}
+            place={place}
             onClick={loggedIn ? logOut : onAuth} /> :
           null}
       </div>

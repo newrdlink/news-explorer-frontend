@@ -6,3 +6,11 @@
 .mark:hover {
   cursor: pointer;
 }
+
+
+/* @media screen and (max-width: 550px) {
+  .mark {
+    width: 14px;
+    height: 19px;
+  }
+} */

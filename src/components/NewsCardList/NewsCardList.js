@@ -4,17 +4,20 @@ import CardsBox from '../CardsBox/CardsBox';
 import { useLocation } from 'react-router-dom';
 
 const NewsCardList = ({
+  loggedIn,
+  savedCards,
   cardsList = [],
   cardsListSearchFull = [],
   isVisibleNews,
   onClickLoadCards,
-  addCardToFav }) => {
+  addCard,
+  removeCard }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
 
   const isAllCards = cardsList.length === cardsListSearchFull.length
-   // console.log(1, cardsList)
+  // console.log(cardsList)
   return (
     <>
       {isVisibleNews || currentPath === "/saved-news" ?
@@ -23,8 +26,11 @@ const NewsCardList = ({
             <h3 className="news__title">Результаты поиска</h3> :
             null}
           <CardsBox
+            loggedIn={loggedIn}
             cardsList={cardsList}
-            addCardToFav={addCardToFav}
+            savedCards={savedCards}
+            addCard={addCard}
+            removeCard={removeCard}
             currentPath={currentPath} />
           {currentPath === "/saved-news" ?
             null :

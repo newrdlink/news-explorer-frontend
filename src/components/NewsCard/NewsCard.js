@@ -4,72 +4,86 @@ import { dateStr } from '../../utils/transformDate';
 import cn from 'classnames';
 import Basket from '../icons/Basket/Basket';
 import Mark from '../icons/Mark/Mark'
-import { UserContext } from '../../contexts/UserContext';
+import MarkMessage from '../MarkMessage/MarkMessage';
 
-const NewsCard = ({ card, currentPath, addCardToFav }) => {
+const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards = [] }) => {
 
   const [isOverMark, setIsOverMark] = useState(false)
   const [isMarked, setIsMarked] = useState(false)
 
-  const currentUser = React.useContext(UserContext);
-  // console.log(card)
   const {
-    url: urlToSourceNews,
+    publishedAt,
+    url,
+    link,
+    image,
     urlToImage,
     _id,
     date,
+    text,
     title,
-    owner,
-    content,
+    description,
     source: { name: sourceName }
   } = card;
-  console.log(date)
-  const currentDayPub = dateStr(date || "");
+
+  const currentDayPub = dateStr(date || publishedAt);
+
+  // console.log(Object.keys(card).some((item) => item === "_id"))
 
   useEffect(() => {
-    const handleOwner = () => currentUser.name === owner ? setIsMarked(true) : null
-    handleOwner()
-  }, [owner, currentUser.name])
+    console.log(1)
+    if (savedCards.some((item) => item.url === card.url)) {
+      setIsMarked(true)      
+    }
+  }, [card.url, savedCards])
 
-  const onClickHandler = () => addCardToFav(_id)
-  // console.log(card)
+  const isSaved = () => savedCards.some((item) => item.link === card.url)
+
+  const onClickHandler = () => {
+    if (isSaved() || currentPath === "/saved-news") {
+      return removeCard(_id)
+    }
+    setIsMarked(true)
+    addCard(_id || url)
+  }
+  // console.log(1)
   return (
     <li className='card'>
       <a className="card__link"
         target="_blank"
         rel="noreferrer"
-        href={urlToSourceNews} >
+        href={url || link} >
         <img className="card__image"
           alt={`Фотография для ${title}`}
-          src={urlToImage} />
+          src={image || urlToImage} />
       </a>
       <div className={cn("card__message-box card__message-box_type_theme",
-        { "visible": currentUser.loggedIn && currentPath === "/saved-news" })}>
+        { "visible": loggedIn && currentPath === "/saved-news" })}>
         <span className="card__message">Природа</span>
       </div>
       <div className={cn("card__message-box card__message-box_type_user",
         { "visible": isOverMark })}>
-        <span className="card__message">{currentUser.loggedIn ?
-          (1 && "Добавить") || "Убрать из сохранённых" :
-          "Войдите, чтобы сохранять статьи"}</span>
+        {loggedIn ?
+          <MarkMessage message={(isMarked || currentPath === "/saved-news") ?
+            "Убрать из сохранённых" : "Добавить"} /> :
+          <MarkMessage message="Войдите, чтобы сохранять статьи" />}
       </div>
       <button type="button"
         className={cn("card__mark",
-          // { "card__mark_type_marked": author === 'alexmark' },
-          // { "card__mark_type_unmarked": isMarked }
+          { "card__mark_type_marked": isMarked },
         )}
         onClick={onClickHandler}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?
           <Basket isOver={isOverMark} /> :
-          <Mark isOver={isOverMark}
-            isMarked={isMarked} />}
+          <Mark
+            isOver={isOverMark}
+            isMarked={isSaved() || isMarked} />}
       </button>
       <div className="card__content">
         <p className="card__date">{currentDayPub}</p>
         <h3 className="card__title">{title}</h3>
-        <p className="card__text">{content}</p>
+        <p className="card__text">{description || text}</p>
         <a href="ya.ru" className="card__src">{sourceName}</a>
       </div>
     </li>

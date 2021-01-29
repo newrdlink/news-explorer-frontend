@@ -19,11 +19,12 @@ import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
 import newsApi from "../../utils/NewsApi";
 // import NotFound from '../NotFound/NotFound';
-import addIdCard from '../../helpers/addIdCard'
+// import addIdCard from '../../helpers/addIdCard'
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
 import fun from '../../helpers/renameKeyDate';
+import CloseMenuMobile from '../icons/CloseMenuMobile/CloseMenuMobile';
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -34,13 +35,14 @@ const App = () => {
   const [isRegOk, setIsRegOk] = useState(true)
 
   const [isServerError, setIsServerError] = useState(false);
-  const [keyWord, setKeyWord] = useState("");
+  const [keyWord, setKeyWord] = useState(" ");
 
   const [cardsListSearchFull, setCardsListSearchFull] = useState([])
   const [countCards, setCountCards] = useState(3);
   const [cardsListSearch, setCardsListSearch] = useState([])
   const [loggedIn, setLoggedIn] = useState(false)
-
+  const [savedCards, setSavedCards] = useState([]);
+  // console.log(cardsListSearch)
   // const history = useHistory();
   const [currentUser, setCurrentUser] = useState({})
 
@@ -51,10 +53,10 @@ const App = () => {
         .then((res) => {
           const [user, cards] = res
           setCurrentUser({
-            "savedCards": cards,
             "name": user.name,
             "email": user.email
           })
+          setSavedCards(cards)
           setLoggedIn(true)
         })
         .catch((error) => {
@@ -65,7 +67,7 @@ const App = () => {
         })
     }
   }, [])
-
+  // console.log(currentUser)
   const changePopup = () => {
     if (isOpenedSignIn) {
       setIsOpenedSignIn(false)
@@ -95,7 +97,6 @@ const App = () => {
     setIsOpenedSignUp(false)
     setIsloading(false)
   };
-
 
   const onSubmitSignUp = (data) => {
     // console.log(data)
@@ -128,12 +129,14 @@ const App = () => {
       .then((res) => {
         setIsloading(true)
         if (res.status) {
-          setCardsListSearchFull(addIdCard(res.articles))
+          // setCardsListSearchFull(addIdCard(res.articles))
+          setCardsListSearchFull(res.articles)
         }
         setIsloading(false)
         setIsVisibleNews(true)
       })
       .catch((err) => {
+        console.log(err)
         setIsloading(false)
         setIsServerError(true)
       })
@@ -149,18 +152,58 @@ const App = () => {
   }
 
   const onClickLoadCards = () => {
-    console.log(countCards)
+    // console.log(countCards)
     setCountCards(countCards + 3)
   }
 
-  const addCardToFav = (idCard) => {
-    // console.log(cardsListSearchFull)
-    const сard = cardsListSearchFull.find((item) => item.id === idCard);
+  const addCard = (idCard) => {
+    // console.log(2, idCard)
+
+    const сard = cardsListSearchFull.find((item) => item.url === idCard);
     сard.keyword = keyWord;
-    console.log(сard)
     const jwt = getToken()
+
     api.addNewCard(сard, jwt)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res) {
+          const сard = cardsListSearchFull.find((item) => item.url === idCard)
+          сard._id = res.id
+          setSavedCards((savedCards) => ([...savedCards, сard]))
+        }
+      })
+      .catch((error) => console.log(error))
+
+    // const сard = cardsListSearch.find((item) => item._id === idCard);
+    // сard.keyword = keyWord;
+
+    // const jwt = getToken()
+    // // console.log(1, сard)
+    // // console.log(2, idCard)
+
+    // api.addNewCard(сard, jwt)
+    //   .then((res) => {
+    //     if (res) {
+    //       const сard = cardsListSearch.find((item) => item._id === idCard)
+    //       сard._id = res.id
+    //       setSavedCards((savedCards) => ([...savedCards, сard]))
+    //     }
+    //   })
+    //   .catch((error) => console.log(error))
+  }
+  // console.log(cardsListSearch)
+  const removeCard = (idCard) => {
+
+    const jwt = getToken()
+
+    // console.log(100, idCard)
+
+    api.removeCard(idCard, jwt)
+      .then((res) => {
+        const updateArr = savedCards.filter((item) => item._id !== res._id)
+        setSavedCards(updateArr)
+        //console.log(1, currentUser)
+        //console.log(2, res)
+      })
       .catch((error) => console.log(error))
   }
 
@@ -178,10 +221,13 @@ const App = () => {
             <Main searchReq={searchReq} />
             {isVisibleNews || isServerError ?
               <ResultSearch
-                addCardToFav={addCardToFav}
+                savedCards={savedCards}
+                loggedIn={loggedIn}
+                addCard={addCard}
+                removeCard={removeCard}
                 isServerError={isServerError}
                 isAreResult={cardsListSearch.length}
-                cardsList={fun(cardsListSearch)}
+                cardsList={cardsListSearch}
                 cardsListSearchFull={cardsListSearchFull}
                 onClickLoadCards={onClickLoadCards}
                 isVisibleNews={isVisibleNews} /> :
@@ -190,10 +236,12 @@ const App = () => {
           </Route>
           <Route path="/saved-news">
             <SavedNewsHeader
-              cardsList={currentUser.savedCards} />
+              cardsList={savedCards} />
             <NewsCardList
+              removeCard={removeCard}
+              loggedIn={loggedIn}
               cardsListSearchFull={fun(cardsListSearchFull)}
-              cardsList={currentUser.savedCards} />
+              cardsList={savedCards} />
           </Route>
         </Switch>
         <RegIsOk

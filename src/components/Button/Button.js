@@ -1,10 +1,10 @@
 import React from 'react';
 import './Button.css';
 
-const Button = ({ userName, buttonName, place, currentPath, onClick, isLocked, type }) => {
+const Button = ({ buttonName, place, currentPath, onClick, isLocked, type, userName, currentUser }) => {
 
   const isUserPage = () => currentPath === "/saved-news"
-
+  // console.log(userName)
   return (
     <button
       disabled={isLocked}

@@ -3,7 +3,7 @@ import './Navigation.css';
 import NavigationItem from '../NavigationItem/NavigationItem';
 
 const Navigation = ({ menuItems, place, mobileHandler, loggedIn }) => {
-  // console.log(currentUser.loggedIn)
+  // console.log(menuItems)
   return (
     <nav className="navigation">
       <ul className={`navigation__items ${place === "header-mobile" && "navigation__items_place_mobile"}`}>

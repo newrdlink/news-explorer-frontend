@@ -58,7 +58,7 @@ class Api extends React.Component {
         link: data.url,
         keyword: data.keyword,
         title: data.title,
-        text: data.content || "У этой статьи, почему-то нет текста (",
+        text: data.description,        
         date: data.publishedAt,
         source: data.source.name,
         image: data.urlToImage,
@@ -66,6 +66,15 @@ class Api extends React.Component {
     }).then(handleResponse);
   }
 
+  removeCard(cardID, token) {
+    return fetch(`${this.address}/articles/${cardID}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+    }).then(handleResponse);
+  }
   // changeAvatar(data, token) {
   //   return fetch(`${this.address}/users/me/avatar`, {
   //     method: "PATCH",
@@ -78,17 +87,6 @@ class Api extends React.Component {
   //     }),
   //   }).then(handleResponse);
   // }
-
-  // removeCard(cardID, token) {
-  //   return fetch(`${this.address}/cards/${cardID}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //   }).then(handleResponse);
-  // }
-
   // likeCard(cardID, token) {
   //   return fetch(`${this.address}/cards/${cardID}/likes/`, {
   //     method: "PUT",

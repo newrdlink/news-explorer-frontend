@@ -87,6 +87,8 @@
   }
   .news {
     padding: 32px 16px;
+    margin-top: 0; 
+    
   }
   .news__button {
     margin: 15px 0 0 0;

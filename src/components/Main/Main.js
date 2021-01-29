@@ -12,7 +12,8 @@ const Main = ({ searchReq }) => {
       <img className="main__image"
         src={useWindowSize() < 650 ? mobileImg : mainImg} alt="Главное изображение" />
       <div className="main__content">
-        <h1 className={`main__title ${useWindowSize() < 650 && "main__title_place_mobile"}`} >Что творится в мире?</h1>
+        <h1 className={`main__title ${useWindowSize() < 650 && "main__title_place_mobile"}`} >
+          Что творится в мире?</h1>
         <p className={`main__subtitle ${useWindowSize() < 650 && "main__subtitle_place_mobile"}`}>
           Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.</p>
         <SearchForm onSubmit={searchReq} />
