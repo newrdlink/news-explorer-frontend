@@ -30,9 +30,8 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
   // console.log(Object.keys(card).some((item) => item === "_id"))
 
   useEffect(() => {
-    console.log(1)
-    if (savedCards.some((item) => item.url === card.url)) {
-      setIsMarked(true)      
+    if (savedCards.some((item) => (item.url || item.link) === card.url)) {
+      setIsMarked(true)
     }
   }, [card.url, savedCards])
 
@@ -40,8 +39,10 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
 
   const onClickHandler = () => {
     if (isSaved() || currentPath === "/saved-news") {
+      console.log("удаление карточки")
       return removeCard(_id)
     }
+    console.log("добавление карточки")
     setIsMarked(true)
     addCard(_id || url)
   }

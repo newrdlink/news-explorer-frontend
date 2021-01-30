@@ -3,7 +3,8 @@ import './Navigation.css';
 import NavigationItem from '../NavigationItem/NavigationItem';
 
 const Navigation = ({ menuItems, place, mobileHandler, loggedIn }) => {
-  // console.log(menuItems)
+  // console.log(loggedIn)
+
   return (
     <nav className="navigation">
       <ul className={`navigation__items ${place === "header-mobile" && "navigation__items_place_mobile"}`}>
@@ -12,7 +13,7 @@ const Navigation = ({ menuItems, place, mobileHandler, loggedIn }) => {
 
           const { id, name, path } = item
 
-          if (loggedIn || path === '/') {
+          if (loggedIn || item.path === "/") {
             return <NavigationItem
               key={id}
               name={name}

@@ -66,7 +66,7 @@ const App = () => {
           console.log(error)
         })
     }
-  }, [])
+  }, [loggedIn])
   // console.log(currentUser)
   const changePopup = () => {
     if (isOpenedSignIn) {
@@ -147,8 +147,9 @@ const App = () => {
   }, [cardsListSearchFull, countCards])
 
   const logOut = () => {
-    // removeToken()
-    // setCurrentUser({})
+    console.log("Выйти")
+    removeToken()
+    setCurrentUser({})
   }
 
   const onClickLoadCards = () => {
@@ -172,31 +173,12 @@ const App = () => {
         }
       })
       .catch((error) => console.log(error))
-
-    // const сard = cardsListSearch.find((item) => item._id === idCard);
-    // сard.keyword = keyWord;
-
-    // const jwt = getToken()
-    // // console.log(1, сard)
-    // // console.log(2, idCard)
-
-    // api.addNewCard(сard, jwt)
-    //   .then((res) => {
-    //     if (res) {
-    //       const сard = cardsListSearch.find((item) => item._id === idCard)
-    //       сard._id = res.id
-    //       setSavedCards((savedCards) => ([...savedCards, сard]))
-    //     }
-    //   })
-    //   .catch((error) => console.log(error))
   }
   // console.log(cardsListSearch)
   const removeCard = (idCard) => {
 
     const jwt = getToken()
-
     // console.log(100, idCard)
-
     api.removeCard(idCard, jwt)
       .then((res) => {
         const updateArr = savedCards.filter((item) => item._id !== res._id)
