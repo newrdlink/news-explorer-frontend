@@ -38,6 +38,9 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
   const isSaved = () => savedCards.some((item) => item.link === card.url)
 
   const onClickHandler = () => {
+    if (!loggedIn) {
+      return
+    }
     if (isSaved() || currentPath === "/saved-news") {
       console.log("удаление карточки")
       return removeCard(_id)
@@ -70,7 +73,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
       </div>
       <button type="button"
         className={cn("card__mark",
-          { "card__mark_type_marked": isMarked },
+          { "card__mark_type_marked": isMarked && loggedIn },
         )}
         onClick={onClickHandler}
         onMouseEnter={() => setIsOverMark(true)}
@@ -78,7 +81,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
         {currentPath === '/saved-news' ?
           <Basket isOver={isOverMark} /> :
           <Mark
-            isOver={isOverMark}
+            isOver={isOverMark && loggedIn}
             isMarked={isSaved() || isMarked} />}
       </button>
       <div className="card__content">

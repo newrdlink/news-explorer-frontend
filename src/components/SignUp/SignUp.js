@@ -5,7 +5,7 @@ import Input from '../Input/Input';
 import { inputs } from '../../config/inputsSignUp';
 import { isValidForms } from '../../utils/isValidForm';
 
-const SignUp = ({ name, buttonName, isOpen, onClose, onSubmit, changePopup, isRegOk }) => {
+const SignUp = ({ name, buttonName, isOpen, onClose, onSubmit, changePopup, isRegOk, clearErr }) => {
 
   const [formData, setFormData] = useState({});
   const [isFormInputsValid, setIsFormInputsValid] = useState({})
@@ -16,10 +16,10 @@ const SignUp = ({ name, buttonName, isOpen, onClose, onSubmit, changePopup, isRe
   }
 
   const onChangeHandler = (evt) => {
-
     const { target: { name, value } } = evt;
     setFormData({ ...formData, [name]: value })
     setIsFormInputsValid({ ...isFormInputsValid, [name]: evt.target.validity.valid })
+    clearErr()
   }
 
   return (
@@ -35,9 +35,8 @@ const SignUp = ({ name, buttonName, isOpen, onClose, onSubmit, changePopup, isRe
       {inputs.map((input) =>
         <Input input={input} key={input.id} onChangeHandler={onChangeHandler} />
       )}
-      {isRegOk ?
-        null :
-        <span className="form__signup-error">Такой пользователь уже есть</span>}
+      {isRegOk ? <span className="form__signup-error">{isRegOk}</span> : null
+      }
     </PopupWithForm>
   )
 }

@@ -7,24 +7,22 @@ import About from '../About/About';
 // import Preloader from '../Preloader';
 import cn from 'classnames';
 import NewsCardList from '../NewsCardList/NewsCardList';
-// import { cardsListSavedStatic } from '../../config/cardsList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
-import { setToken, getToken, removeToken } from "../../utils/Token";
+import { setToken, getToken, removeToken, setUserData, getUserData, removeUserData } from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
 import newsApi from "../../utils/NewsApi";
-// import NotFound from '../NotFound/NotFound';
-// import addIdCard from '../../helpers/addIdCard'
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
 import fun from '../../helpers/renameKeyDate';
-import CloseMenuMobile from '../icons/CloseMenuMobile/CloseMenuMobile';
+// import ProtectedRoute from '../ProtectedRoute';
+// import CloseMenuMobile from '../icons/CloseMenuMobile/CloseMenuMobile';
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -32,10 +30,11 @@ const App = () => {
   const [isOpenedRegIsOk, setIsOpenedRegIsOk] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [isVisibleNews, setIsVisibleNews] = useState(false);
-  const [isRegOk, setIsRegOk] = useState(true)
+  const [isRegOk, setIsRegOk] = useState("")
+  const [isSignInOk, setIsSignInOk] = useState("")
 
   const [isServerError, setIsServerError] = useState(false);
-  const [keyWord, setKeyWord] = useState(" ");
+  const [keyWord, setKeyWord] = useState("");
 
   const [cardsListSearchFull, setCardsListSearchFull] = useState([])
   const [countCards, setCountCards] = useState(3);
@@ -47,11 +46,20 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState({})
 
   useEffect(() => {
+    const userData = JSON.parse(getUserData())
     const jwt = getToken()
+    console.log(1)
+
+    if (userData) {
+      console.log(2)
+      return
+    }
+
     if (jwt) {
       api.getAppStartInfo(jwt)
         .then((res) => {
           const [user, cards] = res
+          setUserData({ user, "cards": cards })
           setCurrentUser({
             "name": user.name,
             "email": user.email
@@ -67,7 +75,30 @@ const App = () => {
         })
     }
   }, [loggedIn])
-  // console.log(currentUser)
+
+  useEffect(() => {
+    const userData = JSON.parse(getUserData())
+    if (userData && loggedIn) {
+      console.log(100)
+      const { user } = userData
+      setUserData({ user, "cards": savedCards })
+      setLoggedIn(true)
+      setCurrentUser(user)
+    }
+  }, [loggedIn, savedCards])
+
+  useEffect(() => {
+    const userData = JSON.parse(getUserData())
+    if (userData && !loggedIn) {
+      console.log(200)
+      const { user, cards } = userData
+      setUserData({ user, "cards": cards })
+      setSavedCards(cards)
+      setLoggedIn(true)
+    }
+  }, [loggedIn])
+
+
   const changePopup = () => {
     if (isOpenedSignIn) {
       setIsOpenedSignIn(false)
@@ -82,7 +113,7 @@ const App = () => {
       setIsOpenedSignIn(true)
     }
   }
-
+  // console.log(currentUser)
   const onSubmitSignIn = (data) => {
     // setIsloading(true)
     // console.log(data)
@@ -93,7 +124,9 @@ const App = () => {
         setIsOpenedSignIn(false)
       }
       )
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        setIsSignInOk(error)
+      })
     setIsOpenedSignUp(false)
     setIsloading(false)
   };
@@ -107,8 +140,8 @@ const App = () => {
       }
       )
       .catch((error) => {
-        error.status ? setIsRegOk(false) :
-          setIsRegOk(true)
+        console.log(error)
+        setIsRegOk(error)
       })
   }
 
@@ -124,12 +157,11 @@ const App = () => {
     }
 
     setIsloading(true)
-    // newsApi.testReqNews()
+
     newsApi.searchByRequest(req)
       .then((res) => {
         setIsloading(true)
         if (res.status) {
-          // setCardsListSearchFull(addIdCard(res.articles))
           setCardsListSearchFull(res.articles)
         }
         setIsloading(false)
@@ -149,7 +181,13 @@ const App = () => {
   const logOut = () => {
     console.log("Выйти")
     removeToken()
+    setLoggedIn(false)
     setCurrentUser({})
+    removeUserData()
+    setIsVisibleNews(false)
+    setSavedCards([])
+    setCardsListSearch([])
+    setCardsListSearchFull([])
   }
 
   const onClickLoadCards = () => {
@@ -158,10 +196,10 @@ const App = () => {
   }
 
   const addCard = (idCard) => {
-    // console.log(2, idCard)
 
     const сard = cardsListSearchFull.find((item) => item.url === idCard);
     сard.keyword = keyWord;
+
     const jwt = getToken()
 
     api.addNewCard(сard, jwt)
@@ -176,18 +214,18 @@ const App = () => {
   }
   // console.log(cardsListSearch)
   const removeCard = (idCard) => {
-
     const jwt = getToken()
     // console.log(100, idCard)
     api.removeCard(idCard, jwt)
       .then((res) => {
         const updateArr = savedCards.filter((item) => item._id !== res._id)
         setSavedCards(updateArr)
-        //console.log(1, currentUser)
-        //console.log(2, res)
       })
       .catch((error) => console.log(error))
   }
+
+  const clearErrSignIn = () => setIsSignInOk("")
+  const clearErrSignUp = () => setIsRegOk("")
 
   return (
     <UserContext.Provider value={currentUser}>
@@ -216,15 +254,19 @@ const App = () => {
               ((isLoading && <PreloaderNews />) || null)}
             <About />
           </Route>
-          <Route path="/saved-news">
-            <SavedNewsHeader
-              cardsList={savedCards} />
-            <NewsCardList
-              removeCard={removeCard}
-              loggedIn={loggedIn}
-              cardsListSearchFull={fun(cardsListSearchFull)}
-              cardsList={savedCards} />
-          </Route>
+
+          {loggedIn ?
+            <Route path="/saved-news">
+              <SavedNewsHeader
+                cardsList={savedCards} />
+              <NewsCardList
+                removeCard={removeCard}
+                loggedIn={loggedIn}
+                cardsListSearchFull={fun(cardsListSearchFull)}
+                cardsList={savedCards} />
+            </Route> :
+            <Redirect to="/" />}
+
         </Switch>
         <RegIsOk
           name="Пользователь успешно зарегистрирован!"
@@ -238,6 +280,7 @@ const App = () => {
           onSubmit={onSubmitSignUp}
           changePopup={changePopup}
           isRegOk={isRegOk}
+          clearErr={clearErrSignUp}
         />
         <SignIn name="Вход"
           buttonName="Ввойти"
@@ -245,6 +288,8 @@ const App = () => {
           onClose={() => setIsOpenedSignIn(false)}
           onSubmit={onSubmitSignIn}
           changePopup={changePopup}
+          isSignInOk={isSignInOk}
+          clearErr={clearErrSignIn}
         />
         <Footer />
       </div>
