@@ -68,9 +68,9 @@ const App = () => {
           setLoggedIn(true)
         })
         .catch((error) => {
-          // removeToken()
-          // setLoggedIn(false)
-          // setCurrentUser({})
+          removeToken()
+          setLoggedIn(false)
+          setCurrentUser({})
           console.log(error)
         })
     }
@@ -92,6 +92,20 @@ const App = () => {
     if (userData && !loggedIn) {
       console.log(200)
       const { user, cards } = userData
+      const jwt = getToken()
+      // request for case that user changed cards on other device
+      api.getInitialCards(jwt)
+        .then((res) =>
+          res.length === cards.length ? null : setSavedCards(res)
+        )
+        .catch((error) => {
+          removeToken()
+          setLoggedIn(false)
+          setCurrentUser({})
+          console.log(error)
+        })
+
+
       setUserData({ user, "cards": cards })
       setSavedCards(cards)
       setLoggedIn(true)

@@ -22,7 +22,6 @@ class Api extends React.Component {
     }).then(handleResponse);
   }
 
-
   getInitialCards(token) {
     return fetch(`${this.address}/articles`, {
       method: "GET",
@@ -32,20 +31,6 @@ class Api extends React.Component {
       },
     }).then(handleResponse);
   }
-
-  // patchUserData(data, token) {
-  //   return fetch(`${this.address}/users/me`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //     body: JSON.stringify({
-  //       name: data.name,
-  //       about: data.about,
-  //     }),
-  //   }).then(handleResponse);
-  // }
 
   addNewCard(data, token) {
     return fetch(`${this.address}/articles`, {
@@ -58,7 +43,7 @@ class Api extends React.Component {
         link: data.url,
         keyword: data.keyword,
         title: data.title,
-        text: data.description,        
+        text: data.description,
         date: data.publishedAt,
         source: data.source.name,
         image: data.urlToImage,
@@ -75,37 +60,6 @@ class Api extends React.Component {
       },
     }).then(handleResponse);
   }
-  // changeAvatar(data, token) {
-  //   return fetch(`${this.address}/users/me/avatar`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //     body: JSON.stringify({
-  //       avatar: data.avatar,
-  //     }),
-  //   }).then(handleResponse);
-  // }
-  // likeCard(cardID, token) {
-  //   return fetch(`${this.address}/cards/${cardID}/likes/`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //   }).then(handleResponse);
-  // }
-
-  // dislikeCard(cardID, token) {
-  //   return fetch(`${this.address}/cards/${cardID}/likes/`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "authorization": `Bearer ${token}`
-  //     },
-  //   }).then(handleResponse);
-  // }
 }
 //создаем экземпляр API
 const api = new Api({
