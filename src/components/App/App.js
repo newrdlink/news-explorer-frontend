@@ -92,20 +92,19 @@ const App = () => {
     if (userData && !loggedIn) {
       console.log(200)
       const { user, cards } = userData
-      const jwt = getToken()
+
       // request for case that user changed cards on other device
-      api.getInitialCards(jwt)
-        .then((res) =>
-          res.length === cards.length ? null : setSavedCards(res)
-        )
-        .catch((error) => {
-          removeToken()
-          setLoggedIn(false)
-          setCurrentUser({})
-          console.log(error)
-        })
-
-
+      //  const jwt = getToken()
+      // api.getInitialCards(jwt)
+      //   .then((res) =>
+      //     res.length === cards.length ? null : setSavedCards(res)
+      //   )
+      //   .catch((error) => {
+      //     removeToken()
+      //     setLoggedIn(false)
+      //     setCurrentUser({})
+      //     console.log(error)
+      //   })
       setUserData({ user, "cards": cards })
       setSavedCards(cards)
       setLoggedIn(true)
@@ -210,10 +209,10 @@ const App = () => {
   }
 
   const addCard = (idCard) => {
-
+    console.log("добавление", idCard)
     const сard = cardsListSearchFull.find((item) => item.url === idCard);
     сard.keyword = keyWord;
-
+    console.log("добавление", сard)
     const jwt = getToken()
 
     api.addNewCard(сard, jwt)
@@ -229,11 +228,14 @@ const App = () => {
   // console.log(cardsListSearch)
   const removeCard = (idCard) => {
     const jwt = getToken()
-    // console.log(100, idCard)
+    console.log("удаление", idCard)
+
     api.removeCard(idCard, jwt)
       .then((res) => {
         const updateArr = savedCards.filter((item) => item._id !== res._id)
         setSavedCards(updateArr)
+        console.log(updateArr)
+        // setCardsListSearch(updateArr)
       })
       .catch((error) => console.log(error))
   }

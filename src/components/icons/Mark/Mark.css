@@ -3,7 +3,7 @@
   height: 22px;
 }
 
-.mark:hover {
+.mark_active {
   cursor: pointer;
 }
 

@@ -27,29 +27,16 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
 
   const currentDayPub = dateStr(date || publishedAt);
 
-  // console.log(Object.keys(card).some((item) => item === "_id"))
-
   useEffect(() => {
     if (savedCards.some((item) => (item.url || item.link) === card.url)) {
       setIsMarked(true)
+    } else {
+      setIsMarked(false)
     }
   }, [card.url, savedCards])
 
   const isSaved = () => savedCards.some((item) => item.link === card.url)
 
-  const onClickHandler = () => {
-    if (!loggedIn) {
-      return
-    }
-    if (isSaved() || currentPath === "/saved-news") {
-      console.log("удаление карточки")
-      return removeCard(_id)
-    }
-    console.log("добавление карточки")
-    setIsMarked(true)
-    addCard(_id || url)
-  }
-  // console.log(1)
   return (
     <li className='card'>
       <a className="card__link"
@@ -75,14 +62,17 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
         className={cn("card__mark",
           { "card__mark_type_marked": isMarked && loggedIn },
         )}
-        onClick={onClickHandler}
+        onClick={() => isMarked || currentPath === "/saved-news" ?
+          removeCard(_id || url) :
+          addCard(_id || url)}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?
           <Basket isOver={isOverMark} /> :
           <Mark
             isOver={isOverMark && loggedIn}
-            isMarked={isSaved() || isMarked} />}
+            isMarked={isSaved() || isMarked}
+            loggedIn={loggedIn} />}
       </button>
       <div className="card__content">
         <p className="card__date">{currentDayPub}</p>
