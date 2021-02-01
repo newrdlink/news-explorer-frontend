@@ -18,6 +18,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
     keyword,
     image,
     urlToImage,
+    source,
     _id,
     date,
     text,
@@ -79,7 +80,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
         <p className="card__date">{currentDayPub}</p>
         <h3 className="card__title">{title}</h3>
         <p className="card__text">{description || text}</p>
-        <a href="ya.ru" className="card__src">{sourceName}</a>
+        <a href="ya.ru" className="card__src">{sourceName || source}</a>
       </div>
     </li>
   )
