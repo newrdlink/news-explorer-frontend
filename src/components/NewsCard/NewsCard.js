@@ -15,6 +15,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
     publishedAt,
     url,
     link,
+    keyword,
     image,
     urlToImage,
     _id,
@@ -49,7 +50,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
       </a>
       <div className={cn("card__message-box card__message-box_type_theme",
         { "visible": loggedIn && currentPath === "/saved-news" })}>
-        <span className="card__message">Природа</span>
+        <span className="card__message">{keyword}</span>
       </div>
       <div className={cn("card__message-box card__message-box_type_user",
         { "visible": isOverMark })}>

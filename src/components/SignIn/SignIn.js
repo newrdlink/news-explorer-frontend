@@ -5,7 +5,15 @@ import Input from '../Input/Input';
 import { inputs } from '../../config/inputsSignIn';
 import { isValidForms } from '../../utils/isValidForm';
 
-const SignIn = ({ name, buttonName, isOpen, onClose, onSubmit, type, changePopup, isSignInOk, clearErr }) => {
+const SignIn = ({ name,
+  buttonName,
+  isOpen,
+  onClose,
+  onSubmit,
+  type,
+  changePopup,
+  isSignInOk,
+  clearErr }) => {
 
   const [formData, setFormData] = useState({});
   const [isFormInputsValid, setIsFormInputsValid] = useState({})

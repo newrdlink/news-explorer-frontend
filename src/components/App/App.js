@@ -13,7 +13,7 @@ import RegIsOk from '../RegIsOk/RegIsOk';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
-import { setToken, getToken, removeToken, setUserData, getUserData, removeUserData } from "../../utils/Token";
+import { setToken, getToken, removeToken, setUserData, getUserData, removeUserData, setKeyword, getKeyword } from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
 import newsApi from "../../utils/NewsApi";
@@ -34,7 +34,7 @@ const App = () => {
   const [isSignInOk, setIsSignInOk] = useState("")
 
   const [isServerError, setIsServerError] = useState(false);
-  const [keyWord, setKeyWord] = useState("");
+  const [keyWordApp, setKeyWordApp] = useState("");
 
   const [cardsListSearchFull, setCardsListSearchFull] = useState([])
   const [countCards, setCountCards] = useState(3);
@@ -48,10 +48,10 @@ const App = () => {
   useEffect(() => {
     const userData = JSON.parse(getUserData())
     const jwt = getToken()
-    console.log(1)
+    // console.log(1)
 
     if (userData) {
-      console.log(2)
+      // console.log(2)
       return
     }
 
@@ -79,7 +79,7 @@ const App = () => {
   useEffect(() => {
     const userData = JSON.parse(getUserData())
     if (userData && loggedIn) {
-      console.log(100)
+      // console.log(100)
       const { user } = userData
       setUserData({ user, "cards": savedCards })
       setLoggedIn(true)
@@ -90,7 +90,7 @@ const App = () => {
   useEffect(() => {
     const userData = JSON.parse(getUserData())
     if (userData && !loggedIn) {
-      console.log(200)
+      // console.log(200)
       const { user, cards } = userData
 
       // request for case that user changed cards on other device
@@ -160,7 +160,8 @@ const App = () => {
 
   const searchReq = (req) => {
     // console.log(req)
-    setKeyWord(req)
+    setKeyWordApp(req)
+    setKeyword(req)
     setIsServerError(false)
     if (countCards > 3) {
       setCountCards(3)
@@ -191,12 +192,10 @@ const App = () => {
     setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
   }, [cardsListSearchFull, countCards])
 
-  const logOut = () => {
-    console.log("Выйти")
-    removeToken()
+  const logOut = () => {    
     setLoggedIn(false)
-    setCurrentUser({})
-    removeUserData()
+    setCurrentUser({})    
+    localStorage.clear()
     setIsVisibleNews(false)
     setSavedCards([])
     setCardsListSearch([])
@@ -211,7 +210,7 @@ const App = () => {
   const addCard = (idCard) => {
     console.log("добавление", idCard)
     const сard = cardsListSearchFull.find((item) => item.url === idCard);
-    сard.keyword = keyWord;
+    сard.keyword = keyWordApp || getKeyword();
     console.log("добавление", сard)
     const jwt = getToken()
 
