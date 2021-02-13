@@ -1,8 +1,12 @@
 module.exports = (arr) => {
 
+  if (arr.length === 0) {
+    return console.log("У вас нет карточек")
+  }
+
   const keywordsObj = arr.reduce((arr, news) => {
     const keyword = news.keyword
-    
+
     if (Object.keys(arr).find((item) => item === keyword)) {
       arr[keyword] = arr[keyword] + 1
       return arr

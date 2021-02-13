@@ -6,23 +6,32 @@ import Footer from '../Footer/Footer';
 import About from '../About/About';
 // import Preloader from '../Preloader';
 import cn from 'classnames';
-import NewsCardList from '../NewsCardList/NewsCardList';
+// import NewsCardList from '../NewsCardList/NewsCardList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
-import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
-import { setToken, getToken, removeToken, setUserData, getUserData, removeUserData, setKeyword, getKeyword } from "../../utils/Token";
+import {
+  setToken,
+  getToken,
+  removeToken,
+  setUserData,
+  getUserData,
+  // removeUserData,
+  setKeyword,
+  getKeyword
+} from "../../utils/Token";
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
-import newsApi from "../../utils/NewsApi";
+// import newsApi from "../../utils/NewsApi";
+import mainApi from "../../utils/MainApi";
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
 import fun from '../../helpers/renameKeyDate';
-// import ProtectedRoute from '../ProtectedRoute';
-// import CloseMenuMobile from '../icons/CloseMenuMobile/CloseMenuMobile';
+import UserPage from '../UserPage/UserPage';
+import ProtectedRoute from '../ProtectedRoute';
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -41,17 +50,23 @@ const App = () => {
   const [cardsListSearch, setCardsListSearch] = useState([])
   const [loggedIn, setLoggedIn] = useState(false)
   const [savedCards, setSavedCards] = useState([]);
-  // console.log(cardsListSearch)
-  // const history = useHistory();
+
+  const history = useHistory()
+  useEffect(() => {
+    const { location: { state } } = history
+    if (state && !loggedIn) {
+      setIsOpenedSignIn(true)
+      history.replace({ ...history.location, state: false });
+    }
+  }, [loggedIn, history])
+
   const [currentUser, setCurrentUser] = useState({})
 
   useEffect(() => {
     const userData = JSON.parse(getUserData())
     const jwt = getToken()
-    // console.log(1)
 
     if (userData) {
-      // console.log(2)
       return
     }
 
@@ -79,7 +94,6 @@ const App = () => {
   useEffect(() => {
     const userData = JSON.parse(getUserData())
     if (userData && loggedIn) {
-      // console.log(100)
       const { user } = userData
       setUserData({ user, "cards": savedCards })
       setLoggedIn(true)
@@ -92,7 +106,6 @@ const App = () => {
     if (userData && !loggedIn) {
       // console.log(200)
       const { user, cards } = userData
-
       // request for case that user changed cards on other device
       //  const jwt = getToken()
       // api.getInitialCards(jwt)
@@ -126,10 +139,8 @@ const App = () => {
       setIsOpenedSignIn(true)
     }
   }
-  // console.log(currentUser)
+
   const onSubmitSignIn = (data) => {
-    // setIsloading(true)
-    // console.log(data)
     apiAuth.signIn(data)
       .then((res) => {
         setToken(res.token)
@@ -145,7 +156,6 @@ const App = () => {
   };
 
   const onSubmitSignUp = (data) => {
-    // console.log(data)
     apiAuth.signUp(data)
       .then((res) => {
         setIsOpenedSignUp(false)
@@ -159,7 +169,6 @@ const App = () => {
   }
 
   const searchReq = (req) => {
-    // console.log(req)
     setKeyWordApp(req)
     setKeyword(req)
     setIsServerError(false)
@@ -172,7 +181,8 @@ const App = () => {
 
     setIsloading(true)
 
-    newsApi.searchByRequest(req)
+    // newsApi.searchByRequest(req)
+    mainApi.searchByRequest(req)
       .then((res) => {
         setIsloading(true)
         if (res.status) {
@@ -192,9 +202,9 @@ const App = () => {
     setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
   }, [cardsListSearchFull, countCards])
 
-  const logOut = () => {    
+  const logOut = () => {
     setLoggedIn(false)
-    setCurrentUser({})    
+    setCurrentUser({})
     localStorage.clear()
     setIsVisibleNews(false)
     setSavedCards([])
@@ -203,15 +213,12 @@ const App = () => {
   }
 
   const onClickLoadCards = () => {
-    // console.log(countCards)
     setCountCards(countCards + 3)
   }
 
   const addCard = (idCard) => {
-    console.log("добавление", idCard)
     const сard = cardsListSearchFull.find((item) => item.url === idCard);
     сard.keyword = keyWordApp || getKeyword();
-    console.log("добавление", сard)
     const jwt = getToken()
 
     api.addNewCard(сard, jwt)
@@ -224,17 +231,14 @@ const App = () => {
       })
       .catch((error) => console.log(error))
   }
-  // console.log(cardsListSearch)
+
   const removeCard = (idCard) => {
     const jwt = getToken()
-    console.log("удаление", idCard)
 
     api.removeCard(idCard, jwt)
       .then((res) => {
         const updateArr = savedCards.filter((item) => item._id !== res._id)
         setSavedCards(updateArr)
-        console.log(updateArr)
-        // setCardsListSearch(updateArr)
       })
       .catch((error) => console.log(error))
   }
@@ -269,19 +273,13 @@ const App = () => {
               ((isLoading && <PreloaderNews />) || null)}
             <About />
           </Route>
-
-          {loggedIn ?
-            <Route path="/saved-news">
-              <SavedNewsHeader
-                cardsList={savedCards} />
-              <NewsCardList
-                removeCard={removeCard}
-                loggedIn={loggedIn}
-                cardsListSearchFull={fun(cardsListSearchFull)}
-                cardsList={savedCards} />
-            </Route> :
-            <Redirect to="/" />}
-
+          <ProtectedRoute
+            path="/saved-news"
+            component={UserPage}
+            loggedIn={loggedIn}
+            savedCards={savedCards}
+            removeCard={removeCard}
+            cardsListSearchFull={fun(cardsListSearchFull)} />
         </Switch>
         <RegIsOk
           name="Пользователь успешно зарегистрирован!"

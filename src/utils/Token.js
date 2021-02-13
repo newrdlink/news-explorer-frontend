@@ -13,7 +13,7 @@ export const setUserData = (data) => {
 
 export const getUserData = () => localStorage.getItem(USER_DATA)
 
-export const removeUserData = () => localStorage.removeItem(USER_DATA)
+// export const removeUserData = () => localStorage.removeItem(USER_DATA)
 
 export const setToken = (token) => {
   localStorage.setItem(TOKEN_KEY, token)

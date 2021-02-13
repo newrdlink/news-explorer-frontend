@@ -66,7 +66,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
         )}
         onClick={() => isMarked || currentPath === "/saved-news" ?
           removeCard(_id || url) :
-          addCard(_id || url)}
+          (loggedIn && addCard(_id || url))}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?
