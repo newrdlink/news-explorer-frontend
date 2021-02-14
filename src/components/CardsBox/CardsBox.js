@@ -2,11 +2,12 @@ import React from 'react';
 import './CardsBox.css';
 import NewsCard from '../NewsCard/NewsCard';
 
-const CardsBox = ({ cardsList = [], currentPath, addCard, removeCard, loggedIn, savedCards }) => {
+const CardsBox = ({ cardsList = [], currentPath, addCard, removeCard, loggedIn, savedCards, handlerSignInOnCardClick }) => {
   // console.log(cardsList)
   return (
     <ul className="cards">
       {cardsList.map((card) => <NewsCard
+        handlerSignInOnCardClick={handlerSignInOnCardClick}
         savedCards={savedCards}
         loggedIn={loggedIn}
         // key={card.url}

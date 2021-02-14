@@ -6,14 +6,20 @@ import cn from 'classnames';
 import { closeEscPopup } from "../../helpers/closeEscPopup";
 import Button from '../Button/Button';
 
-const PopupWithForm = ({ children, name, buttonName, onSubmit, isOpen, onClose, isValidForms, changePopup }) => {
+const PopupWithForm = ({ children,
+  name,
+  buttonName,
+  onSubmit,
+  isOpen,
+  onClose,
+  isValidForms,
+  changePopup,
+  isRequesting }) => {
 
   useEffect(() => {
     if (isOpen) { closeEscPopup(onClose) }
   }, [isOpen, onClose])
-  // const { path } = useRouteMatch();
-  // const user = React.useContext(UserContext);
-  // console.log(isOpen[type])
+
   return (
     <section className={`popup ${isOpen && "popup_opened"}`}
       onClick={(evt) => evt.target === evt.currentTarget && onClose()}
@@ -26,9 +32,10 @@ const PopupWithForm = ({ children, name, buttonName, onSubmit, isOpen, onClose, 
         <form className="form" onSubmit={onSubmit} noValidate>
           {children}
           {buttonName ?
-            <Button buttonName={buttonName}
+            <Button
+              buttonName={buttonName}
               place="auth"
-              isLocked={!isValidForms}
+              isLocked={isRequesting || !isValidForms}
               type="submit"
             /> :
             null}

@@ -22,6 +22,7 @@ import {
   setKeyword,
   getKeyword
 } from "../../utils/Token";
+import { setCardsToLocSt, getCardsFromLocSt, removeCardsOfLocSt } from '../../utils/setCardsToLocSt'
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
 // import newsApi from "../../utils/NewsApi";
@@ -32,6 +33,7 @@ import PreloaderNews from '../PreloaderNews/PreloaderNews';
 import fun from '../../helpers/renameKeyDate';
 import UserPage from '../UserPage/UserPage';
 import ProtectedRoute from '../ProtectedRoute';
+import { ADD_CARDS } from '../../constants'
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -50,6 +52,9 @@ const App = () => {
   const [cardsListSearch, setCardsListSearch] = useState([])
   const [loggedIn, setLoggedIn] = useState(false)
   const [savedCards, setSavedCards] = useState([]);
+
+  const [isRequesting, setIsRequesting] = useState(false)
+  // const [isErrServer, setIsErrServer] = useState(false)
 
   const history = useHistory()
   useEffect(() => {
@@ -141,60 +146,69 @@ const App = () => {
   }
 
   const onSubmitSignIn = (data) => {
+    setIsRequesting(true)
     apiAuth.signIn(data)
       .then((res) => {
         setToken(res.token)
         setLoggedIn(true)
         setIsOpenedSignIn(false)
+        setIsRequesting(false)
       }
       )
       .catch((error) => {
+        console.log(error)
         setIsSignInOk(error)
+        setIsRequesting(false)
       })
     setIsOpenedSignUp(false)
     setIsloading(false)
   };
 
   const onSubmitSignUp = (data) => {
+    setIsRequesting(true)
     apiAuth.signUp(data)
       .then((res) => {
         setIsOpenedSignUp(false)
         setIsOpenedRegIsOk(true)
+        setIsRequesting(false)
       }
       )
       .catch((error) => {
         console.log(error)
         setIsRegOk(error)
+        setIsRequesting(false)
       })
   }
 
   const searchReq = (req) => {
+    setIsRequesting(true)
     setKeyWordApp(req)
     setKeyword(req)
     setIsServerError(false)
-    if (countCards > 3) {
-      setCountCards(3)
+    if (countCards > ADD_CARDS) {
+      setCountCards(ADD_CARDS)
     }
     if (isVisibleNews) {
       setIsVisibleNews(false)
     }
-
     setIsloading(true)
-
     // newsApi.searchByRequest(req)
     mainApi.searchByRequest(req)
       .then((res) => {
         setIsloading(true)
         if (res.status) {
           setCardsListSearchFull(res.articles)
+          setCardsToLocSt(res.articles)
         }
         setIsloading(false)
         setIsVisibleNews(true)
+        setIsRequesting(false)
       })
       .catch((err) => {
         console.log(err)
         setIsloading(false)
         setIsServerError(true)
+        setIsRequesting(false)
       })
   }
 
@@ -213,7 +227,7 @@ const App = () => {
   }
 
   const onClickLoadCards = () => {
-    setCountCards(countCards + 3)
+    setCountCards(countCards + ADD_CARDS)
   }
 
   const addCard = (idCard) => {
@@ -246,6 +260,8 @@ const App = () => {
   const clearErrSignIn = () => setIsSignInOk("")
   const clearErrSignUp = () => setIsRegOk("")
 
+  const handlerSignInOnCardClick = () => setIsOpenedSignIn(true)
+
   return (
     <UserContext.Provider value={currentUser}>
       <div className={cn("app", { "app_visible": true })}>
@@ -257,9 +273,13 @@ const App = () => {
           currentUser={currentUser} />
         <Switch>
           <Route path="/" exact>
-            <Main searchReq={searchReq} />
+            <Main
+              searchReq={searchReq}
+              isRequesting={isRequesting}
+              isServerError={isServerError} />
             {isVisibleNews || isServerError ?
               <ResultSearch
+                handlerSignInOnCardClick={handlerSignInOnCardClick}
                 savedCards={savedCards}
                 loggedIn={loggedIn}
                 addCard={addCard}
@@ -294,6 +314,7 @@ const App = () => {
           changePopup={changePopup}
           isRegOk={isRegOk}
           clearErr={clearErrSignUp}
+          isRequesting={isRequesting}
         />
         <SignIn name="Вход"
           buttonName="Ввойти"
@@ -303,6 +324,7 @@ const App = () => {
           changePopup={changePopup}
           isSignInOk={isSignInOk}
           clearErr={clearErrSignIn}
+          isRequesting={isRequesting}
         />
         <Footer />
       </div>

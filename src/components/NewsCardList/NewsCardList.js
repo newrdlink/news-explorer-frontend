@@ -11,7 +11,8 @@ const NewsCardList = ({
   isVisibleNews,
   onClickLoadCards,
   addCard,
-  removeCard }) => {
+  removeCard,
+  handlerSignInOnCardClick }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
@@ -26,6 +27,7 @@ const NewsCardList = ({
             <h3 className="news__title">Результаты поиска</h3> :
             null}
           <CardsBox
+            handlerSignInOnCardClick={handlerSignInOnCardClick}
             loggedIn={loggedIn}
             cardsList={cardsList}
             savedCards={savedCards}

@@ -15,11 +15,13 @@ const ResultSearch = ({
   onClickLoadCards,
   isVisibleNews,
   isServerError,
-  cardsListSearchFull }) => {
+  cardsListSearchFull,
+  handlerSignInOnCardClick }) => {
   // console.log(cardsList)
 
   return (isAreResult ?
     <NewsCardList
+      handlerSignInOnCardClick={handlerSignInOnCardClick}
       loggedIn={loggedIn}
       addCard={addCard}
       removeCard={removeCard}

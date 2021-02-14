@@ -5,7 +5,7 @@ import './Main.css';
 import SearchForm from "../SearchForm/SearchForm";
 import useWindowSize from '../../helpers/windowsWidth';
 
-const Main = ({ searchReq }) => {
+const Main = ({ searchReq, isRequesting, isServerError }) => {
 
   return (
     <main className="main">
@@ -16,7 +16,10 @@ const Main = ({ searchReq }) => {
           Что творится в мире?</h1>
         <p className={`main__subtitle ${useWindowSize() < 650 && "main__subtitle_place_mobile"}`}>
           Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.</p>
-        <SearchForm onSubmit={searchReq} />
+        <SearchForm
+          onSubmit={searchReq}
+          isRequesting={isRequesting}
+          isServerError={isServerError} />
       </div>
     </main>
   )

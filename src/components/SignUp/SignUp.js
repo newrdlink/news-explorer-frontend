@@ -12,7 +12,8 @@ const SignUp = ({ name,
   onSubmit,
   changePopup,
   isRegOk,
-  clearErr }) => {
+  clearErr,
+  isRequesting }) => {
 
   const [formData, setFormData] = useState({});
   const [isFormInputsValid, setIsFormInputsValid] = useState({})
@@ -38,6 +39,7 @@ const SignUp = ({ name,
       onSubmit={onSubmitHandler}
       isValidForms={isValidForms(isFormInputsValid, inputs)}
       changePopup={changePopup}
+      isRequesting={isRequesting}
     >
       {inputs.map((input) =>
         <Input input={input} key={input.id} onChangeHandler={onChangeHandler} />

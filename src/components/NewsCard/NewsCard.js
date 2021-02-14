@@ -6,7 +6,7 @@ import Basket from '../icons/Basket/Basket';
 import Mark from '../icons/Mark/Mark'
 import MarkMessage from '../MarkMessage/MarkMessage';
 
-const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards = [] }) => {
+const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards = [], handlerSignInOnCardClick }) => {
 
   const [isOverMark, setIsOverMark] = useState(false)
   const [isMarked, setIsMarked] = useState(false)
@@ -66,7 +66,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
         )}
         onClick={() => isMarked || currentPath === "/saved-news" ?
           removeCard(_id || url) :
-          (loggedIn && addCard(_id || url))}
+          ((loggedIn && addCard(_id || url))) || handlerSignInOnCardClick()}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?
