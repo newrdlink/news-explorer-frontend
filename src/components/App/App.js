@@ -8,7 +8,7 @@ import cn from 'classnames';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
-import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
 import {
   setToken,
@@ -18,20 +18,20 @@ import {
   getUserData,
   // removeUserData,
   setKeyword,
-  getKeyword
+  // getKeyword
 } from "../../utils/Token";
 import {
   setCardsToLocSt,
   getCardsFromLocSt,
-  removeCardsOfLocSt,
+  // removeCardsOfLocSt,
   setCountToLocSt,
   getCountFromLocSt,
-  removeCountOfLocSt
+  // removeCountOfLocSt
 } from '../../utils/setCardsToLocSt'
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
-import newsApi from "../../utils/NewsApi";
-// import mainApi from "../../utils/MainApi";
+// import newsApi from "../../utils/NewsApi";
+import mainApi from "../../utils/MainApi";
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
@@ -58,8 +58,8 @@ const App = () => {
 
   const [isRequesting, setIsRequesting] = useState(false)
 
-  const location = useLocation();
-  const { pathname: currentPath } = location
+  // const location = useLocation();
+  // const { pathname: currentPath } = location
 
   const history = useHistory()
   useEffect(() => {
@@ -187,8 +187,8 @@ const App = () => {
       setIsVisibleNews(false)
     }
     setIsloading(true)
-    newsApi.searchByRequest(req)
-      // mainApi.searchByRequest(req)
+    // newsApi.searchByRequest(req)
+    mainApi.searchByRequest(req)
       .then((res) => {
         setIsloading(true)
         if (res.status) {
@@ -226,10 +226,10 @@ const App = () => {
   }
 
   const addCard = (idCard) => {
-    console.log("добавление", idCard)
+    // console.log("добавление", idCard)
     const сard = JSON.parse(getCardsFromLocSt()).find((item) => item.url === idCard);
     const jwt = getToken()
-    console.log(idCard)
+    // console.log(idCard)
 
     api.addNewCard(сard, jwt)
       .then((res) => {
@@ -243,15 +243,15 @@ const App = () => {
   }
 
   const removeCard = (idCard) => {
-    console.log("удаление", idCard)
+    // console.log("удаление", idCard)
     const сard = savedCards.find((item) => item.url === idCard)
-    console.log("удаление2", сard)
+    // console.log("удаление2", сard)
     const jwt = getToken()
     // const cardFromAllList = JSON.parse(getCardsFromLocSt()).find((item) => item._id === idCard)
-    const currentIdCard = () => currentPath === "/" ? сard._id : idCard
+    // const currentIdCard = () => currentPath === "/" ? сard._id : idCard
     //console.log(idCard)
     // console.log(сard)
-    console.log(currentIdCard())
+    // console.log(currentIdCard())
     // console.log(currentIdCard)
 
     api.removeCard(сard._id, jwt)
