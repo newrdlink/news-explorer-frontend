@@ -27,6 +27,7 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
     source: { name: sourceName }
   } = card;
 
+  // console.log(keyword)
   const currentDayPub = dateStr(date || publishedAt);
 
   useEffect(() => {
@@ -65,8 +66,9 @@ const NewsCard = ({ card, currentPath, addCard, loggedIn, removeCard, savedCards
           { "card__mark_type_marked": isMarked && loggedIn },
         )}
         onClick={() => isMarked || currentPath === "/saved-news" ?
-          removeCard(_id || url) :
-          ((loggedIn && addCard(_id || url))) || handlerSignInOnCardClick()}
+          // removeCard(_id || url) :
+          removeCard(url) :
+          ((loggedIn && addCard(url))) || handlerSignInOnCardClick()}
         onMouseEnter={() => setIsOverMark(true)}
         onMouseLeave={() => setIsOverMark(false)}>
         {currentPath === '/saved-news' ?

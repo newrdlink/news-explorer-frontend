@@ -1,4 +1,7 @@
 module.exports = (arr, count) => {
-  const newArr = arr.slice(0, count)  
+  if (!arr) {
+    return
+  }
+  const newArr = arr.slice(0, count)
   return newArr
 };

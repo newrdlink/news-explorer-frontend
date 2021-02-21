@@ -4,13 +4,11 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import About from '../About/About';
-// import Preloader from '../Preloader';
 import cn from 'classnames';
-// import NewsCardList from '../NewsCardList/NewsCardList';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import RegIsOk from '../RegIsOk/RegIsOk';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import { UserContext } from "../../contexts/UserContext";
 import {
   setToken,
@@ -22,11 +20,18 @@ import {
   setKeyword,
   getKeyword
 } from "../../utils/Token";
-import { setCardsToLocSt, getCardsFromLocSt, removeCardsOfLocSt } from '../../utils/setCardsToLocSt'
+import {
+  setCardsToLocSt,
+  getCardsFromLocSt,
+  removeCardsOfLocSt,
+  setCountToLocSt,
+  getCountFromLocSt,
+  removeCountOfLocSt
+} from '../../utils/setCardsToLocSt'
 import apiAuth from "../../utils/Auth";
 import api from "../../utils/Api";
-// import newsApi from "../../utils/NewsApi";
-import mainApi from "../../utils/MainApi";
+import newsApi from "../../utils/NewsApi";
+// import mainApi from "../../utils/MainApi";
 import countCardsHandler from '../../helpers/addThirdCard';
 import ResultSearch from '../ResultSearch/ResultSearch';
 import PreloaderNews from '../PreloaderNews/PreloaderNews';
@@ -34,6 +39,7 @@ import fun from '../../helpers/renameKeyDate';
 import UserPage from '../UserPage/UserPage';
 import ProtectedRoute from '../ProtectedRoute';
 import { ADD_CARDS } from '../../constants'
+import addIdCard from '../../helpers/addIdCard'
 
 const App = () => {
   const [isOpenedSignUp, setIsOpenedSignUp] = useState(false);
@@ -43,10 +49,7 @@ const App = () => {
   const [isVisibleNews, setIsVisibleNews] = useState(false);
   const [isRegOk, setIsRegOk] = useState("")
   const [isSignInOk, setIsSignInOk] = useState("")
-
   const [isServerError, setIsServerError] = useState(false);
-  const [keyWordApp, setKeyWordApp] = useState("");
-
   const [cardsListSearchFull, setCardsListSearchFull] = useState([])
   const [countCards, setCountCards] = useState(3);
   const [cardsListSearch, setCardsListSearch] = useState([])
@@ -54,7 +57,9 @@ const App = () => {
   const [savedCards, setSavedCards] = useState([]);
 
   const [isRequesting, setIsRequesting] = useState(false)
-  // const [isErrServer, setIsErrServer] = useState(false)
+
+  const location = useLocation();
+  const { pathname: currentPath } = location
 
   const history = useHistory()
   useEffect(() => {
@@ -98,6 +103,7 @@ const App = () => {
 
   useEffect(() => {
     const userData = JSON.parse(getUserData())
+
     if (userData && loggedIn) {
       const { user } = userData
       setUserData({ user, "cards": savedCards })
@@ -108,29 +114,17 @@ const App = () => {
 
   useEffect(() => {
     const userData = JSON.parse(getUserData())
+
     if (userData && !loggedIn) {
-      // console.log(200)
       const { user, cards } = userData
-      // request for case that user changed cards on other device
-      //  const jwt = getToken()
-      // api.getInitialCards(jwt)
-      //   .then((res) =>
-      //     res.length === cards.length ? null : setSavedCards(res)
-      //   )
-      //   .catch((error) => {
-      //     removeToken()
-      //     setLoggedIn(false)
-      //     setCurrentUser({})
-      //     console.log(error)
-      //   })
       setUserData({ user, "cards": cards })
       setSavedCards(cards)
       setLoggedIn(true)
     }
   }, [loggedIn])
 
-
   const changePopup = () => {
+
     if (isOpenedSignIn) {
       setIsOpenedSignIn(false)
       setIsOpenedSignUp(true)
@@ -147,6 +141,7 @@ const App = () => {
 
   const onSubmitSignIn = (data) => {
     setIsRequesting(true)
+
     apiAuth.signIn(data)
       .then((res) => {
         setToken(res.token)
@@ -166,6 +161,7 @@ const App = () => {
 
   const onSubmitSignUp = (data) => {
     setIsRequesting(true)
+
     apiAuth.signUp(data)
       .then((res) => {
         setIsOpenedSignUp(false)
@@ -182,7 +178,6 @@ const App = () => {
 
   const searchReq = (req) => {
     setIsRequesting(true)
-    setKeyWordApp(req)
     setKeyword(req)
     setIsServerError(false)
     if (countCards > ADD_CARDS) {
@@ -192,13 +187,15 @@ const App = () => {
       setIsVisibleNews(false)
     }
     setIsloading(true)
-    // newsApi.searchByRequest(req)
-    mainApi.searchByRequest(req)
+    newsApi.searchByRequest(req)
+      // mainApi.searchByRequest(req)
       .then((res) => {
         setIsloading(true)
         if (res.status) {
+          setCountCards(ADD_CARDS)
+          setCountToLocSt(ADD_CARDS)
           setCardsListSearchFull(res.articles)
-          setCardsToLocSt(res.articles)
+          setCardsToLocSt(addIdCard(res.articles, req))
         }
         setIsloading(false)
         setIsVisibleNews(true)
@@ -212,10 +209,6 @@ const App = () => {
       })
   }
 
-  useEffect(() => {
-    setCardsListSearch(countCardsHandler(cardsListSearchFull, countCards))
-  }, [cardsListSearchFull, countCards])
-
   const logOut = () => {
     setLoggedIn(false)
     setCurrentUser({})
@@ -227,18 +220,21 @@ const App = () => {
   }
 
   const onClickLoadCards = () => {
-    setCountCards(countCards + ADD_CARDS)
+    const newCount = Number(countCards) + Number(ADD_CARDS)
+    setCountCards(newCount)
+    setCountToLocSt(newCount)
   }
 
   const addCard = (idCard) => {
-    const сard = cardsListSearchFull.find((item) => item.url === idCard);
-    сard.keyword = keyWordApp || getKeyword();
+    console.log("добавление", idCard)
+    const сard = JSON.parse(getCardsFromLocSt()).find((item) => item.url === idCard);
     const jwt = getToken()
+    console.log(idCard)
 
     api.addNewCard(сard, jwt)
       .then((res) => {
         if (res) {
-          const сard = cardsListSearchFull.find((item) => item.url === idCard)
+          const сard = JSON.parse(getCardsFromLocSt()).find((item) => item.url === idCard)
           сard._id = res.id
           setSavedCards((savedCards) => ([...savedCards, сard]))
         }
@@ -247,9 +243,18 @@ const App = () => {
   }
 
   const removeCard = (idCard) => {
+    console.log("удаление", idCard)
+    const сard = savedCards.find((item) => item.url === idCard)
+    console.log("удаление2", сard)
     const jwt = getToken()
+    // const cardFromAllList = JSON.parse(getCardsFromLocSt()).find((item) => item._id === idCard)
+    const currentIdCard = () => currentPath === "/" ? сard._id : idCard
+    //console.log(idCard)
+    // console.log(сard)
+    console.log(currentIdCard())
+    // console.log(currentIdCard)
 
-    api.removeCard(idCard, jwt)
+    api.removeCard(сard._id, jwt)
       .then((res) => {
         const updateArr = savedCards.filter((item) => item._id !== res._id)
         setSavedCards(updateArr)
@@ -259,14 +264,31 @@ const App = () => {
 
   const clearErrSignIn = () => setIsSignInOk("")
   const clearErrSignUp = () => setIsRegOk("")
+  // open SignIn if click on card for save
+  const handlerSignInOnCardClick = () => {
+    if (loggedIn) {
+      return
+    }
+    setIsOpenedSignIn(true)
+  }
 
-  const handlerSignInOnCardClick = () => setIsOpenedSignIn(true)
+  useEffect(() => {
+    const historyCards = JSON.parse(getCardsFromLocSt())
+    const countCardsLocSt = getCountFromLocSt()
+
+    if (countCardsLocSt !== countCards) {
+      return setCountCards(countCardsLocSt)
+    }
+
+    if (countCardsLocSt) {
+      setIsVisibleNews(true)
+      setCardsListSearch(countCardsHandler(historyCards, countCardsLocSt))
+    }
+  }, [isRequesting, countCards])
 
   return (
     <UserContext.Provider value={currentUser}>
       <div className={cn("app", { "app_visible": true })}>
-        {/* <Preloader
-          isLoading={isLoading} /> */}
         <Header onAuth={() => setIsOpenedSignIn(true)}
           logOut={logOut}
           loggedIn={loggedIn}
@@ -285,9 +307,9 @@ const App = () => {
                 addCard={addCard}
                 removeCard={removeCard}
                 isServerError={isServerError}
-                isAreResult={cardsListSearch.length}
+                isAreResult={cardsListSearch}
                 cardsList={cardsListSearch}
-                cardsListSearchFull={cardsListSearchFull}
+                cardsListSearchFull={JSON.parse(getCardsFromLocSt())}
                 onClickLoadCards={onClickLoadCards}
                 isVisibleNews={isVisibleNews} /> :
               ((isLoading && <PreloaderNews />) || null)}

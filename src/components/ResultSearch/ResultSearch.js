@@ -17,7 +17,7 @@ const ResultSearch = ({
   isServerError,
   cardsListSearchFull,
   handlerSignInOnCardClick }) => {
-  // console.log(cardsList)
+  // console.log(isAreResult)
 
   return (isAreResult ?
     <NewsCardList

@@ -19,6 +19,7 @@ const NewsCardList = ({
 
   const isAllCards = cardsList.length === cardsListSearchFull.length
   // console.log(cardsList)
+  // console.log(cardsListSearchFull)
   return (
     <>
       {isVisibleNews || currentPath === "/saved-news" ?
