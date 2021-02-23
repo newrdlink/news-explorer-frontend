@@ -9,11 +9,12 @@ import Button from '../Button/Button';
 import MenuMobile from '../icons/MenuMobile/MenuMobile';
 import useWindowSize from '../../helpers/windowsWidth';
 
-const Header = ({ onAuth, currentUser, logOut }) => {
+const Header = ({ onAuth, currentUser, logOut, loggedIn }) => {
 
   const location = useLocation();
   const { pathname: currentPath } = location
-
+  // console.log(currentUser)
+  // const { userName } = currentUser
   return (
     <header className={cn("header",
       { "header_logged": currentPath === "/saved-news" },
@@ -22,6 +23,7 @@ const Header = ({ onAuth, currentUser, logOut }) => {
       <Logo />
       {useWindowSize() < 690 ?
         <MenuMobile currentUser={currentUser}
+          loggedIn={loggedIn}
           place="header-mobile"
           onAuth={onAuth}
           logOut={logOut}
@@ -30,13 +32,16 @@ const Header = ({ onAuth, currentUser, logOut }) => {
         <Navigation
           menuItems={menuItems}
           place='header'
-          currentUser={currentUser}
+          loggedIn={loggedIn}
         />}
-      {useWindowSize() < 690 ? null : <Button place="header"
-        userName={currentUser.name}
-        currentPath={currentPath}
-        onClick={currentUser.loggedIn ? logOut : onAuth}
-      />}
+      {useWindowSize() < 690 ? null :
+        <Button
+          currentUser={currentUser}
+          place="header"
+          userName={currentUser.name}
+          currentPath={currentPath}
+          onClick={loggedIn ? logOut : onAuth}
+        />}
     </header>
   )
 }
