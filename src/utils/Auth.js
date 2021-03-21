@@ -33,7 +33,7 @@ class Api extends React.Component {
 }
 
 const apiAuth = new Api({
-  address: "https://api.news.wd-rd.ru",
+  address: "https://api.didrom.ru",
   // address: "https://api.dr14.students.nomoredomains.work",
   headers: {
     "Content-Type": "application/json",

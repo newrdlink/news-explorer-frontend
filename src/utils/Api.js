@@ -63,7 +63,7 @@ class Api extends React.Component {
 }
 //создаем экземпляр API
 const api = new Api({
-  address: "https://api.news.wd-rd.ru",
+  address: "https://api.didrom.ru",
   headers: {
     "Content-Type": "application/json",
   },
